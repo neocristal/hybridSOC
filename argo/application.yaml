@@ -2,10 +2,23 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: hybridsoc
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
+  project: default
   source:
-    repoURL: https://github.com/yourrepo/hybridsoc
+    repoURL: https://github.com/your-org/hybridsoc
+    targetRevision: main
     path: k8s/overlays/prod
   destination:
     server: https://kubernetes.default.svc
     namespace: hybridsoc
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+  revisionHistoryLimit: 5

@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thehive
+  namespace: hybridsoc
+  labels:
+    app: thehive
+    component: soar
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thehive
+  template:
+    metadata:
+      labels:
+        app: thehive
+    spec:
+      containers:
+        - name: thehive
+          image: strangebee/thehive:5.3
+          ports:
+            - containerPort: 9000
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+          volumeMounts:
+            - name: thehive-data
+              mountPath: /opt/thp/thehive/data
+      volumes:
+        - name: thehive-data
+          persistentVolumeClaim:
+            claimName: thehive-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: thehive
+  namespace: hybridsoc
+spec:
+  selector:
+    app: thehive
+  ports:
+    - port: 9000
+      targetPort: 9000
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: thehive-pvc
+  namespace: hybridsoc
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 10Gi

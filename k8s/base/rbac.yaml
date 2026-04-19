@@ -1,8 +1,66 @@
+---
+# ServiceAccount: AI Engine
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ai-engine-sa
+  namespace: hybridsoc
+automountServiceAccountToken: false
+---
+# ServiceAccount: GRC Engine
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: grc-engine-sa
+  namespace: hybridsoc
+automountServiceAccountToken: false
+---
+# Role: AI Engine — read pods only
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: ai-role
+  name: ai-engine-role
+  namespace: hybridsoc
 rules:
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["get","list"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+---
+# Role: GRC Engine — read configmaps only
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: grc-engine-role
+  namespace: hybridsoc
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ai-engine-rolebinding
+  namespace: hybridsoc
+subjects:
+  - kind: ServiceAccount
+    name: ai-engine-sa
+    namespace: hybridsoc
+roleRef:
+  kind: Role
+  name: ai-engine-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: grc-engine-rolebinding
+  namespace: hybridsoc
+subjects:
+  - kind: ServiceAccount
+    name: grc-engine-sa
+    namespace: hybridsoc
+roleRef:
+  kind: Role
+  name: grc-engine-role
+  apiGroup: rbac.authorization.k8s.io

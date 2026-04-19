@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wazuh-manager
+  namespace: hybridsoc
+  labels:
+    app: wazuh-manager
+    component: siem
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wazuh-manager
+  template:
+    metadata:
+      labels:
+        app: wazuh-manager
+    spec:
+      containers:
+        - name: wazuh-manager
+          image: wazuh/wazuh-manager:4.7.2
+          ports:
+            - containerPort: 1514
+              name: agent-udp
+              protocol: UDP
+            - containerPort: 1515
+              name: agent-tcp
+            - containerPort: 55000
+              name: api
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "2000m"
+          volumeMounts:
+            - name: wazuh-data
+              mountPath: /var/ossec/data
+      volumes:
+        - name: wazuh-data
+          persistentVolumeClaim:
+            claimName: wazuh-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wazuh-manager
+  namespace: hybridsoc
+spec:
+  selector:
+    app: wazuh-manager
+  ports:
+    - name: agent
+      port: 1514
+      targetPort: 1514
+    - name: api
+      port: 55000
+      targetPort: 55000
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wazuh-pvc
+  namespace: hybridsoc
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 20Gi

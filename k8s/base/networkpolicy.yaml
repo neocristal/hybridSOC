@@ -1,9 +1,46 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: default-deny
+  name: default-deny-all
+  namespace: hybridsoc
 spec:
   podSelector: {}
   policyTypes:
-  - Ingress
-  - Egress
+    - Ingress
+    - Egress
+---
+# Allow: AI Engine -> GRC Engine (internal)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ai-to-grc
+  namespace: hybridsoc
+spec:
+  podSelector:
+    matchLabels:
+      app: grc-engine
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: ai-engine
+      ports:
+        - port: 8001
+---
+# Allow: API Gateway -> AI Engine and GRC Engine
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-gateway-to-services
+  namespace: hybridsoc
+spec:
+  podSelector:
+    matchLabels:
+      app: ai-engine
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: api-gateway
+      ports:
+        - port: 8000

@@ -1,2 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
 resources:
-- ../../base
+  - ../../base
+
+# Production: scale up replicas
+patches:
+  - patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 3
+    target:
+      kind: Deployment
+      name: ai-engine
+  - patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 3
+    target:
+      kind: Deployment
+      name: grc-engine
+
+# Production image tags
+images:
+  - name: hybridsoc/ai-engine
+    newTag: "2.0.0"
+  - name: hybridsoc/grc-engine
+    newTag: "2.0.0"
+  - name: hybridsoc/api-gateway
+    newTag: "2.0.0"
+
+commonLabels:
+  environment: production

@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: hybridsoc
+
+resources:
+  - namespace.yaml
+  - rbac.yaml
+  - networkpolicy.yaml
+  - ai.yaml
+  - grc.yaml
+  - api-gateway.yaml
+  - wazuh.yaml
+  - thehive.yaml

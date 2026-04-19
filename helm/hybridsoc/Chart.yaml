@@ -1,3 +1,18 @@
 apiVersion: v2
 name: hybridsoc
-version: 1.0.0
+description: AI-Driven HybridSOC with Integrated GRC — Helm Chart
+type: application
+version: 2.0.0
+appVersion: "2.0.0"
+keywords:
+  - soc
+  - siem
+  - soar
+  - grc
+  - ai
+  - zero-trust
+  - cybersecurity
+home: https://github.com/your-org/hybridsoc
+maintainers:
+  - name: Arunas
+    email: security@hybridsoc.ai

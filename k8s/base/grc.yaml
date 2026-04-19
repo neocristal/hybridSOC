@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ai-engine
+  name: grc-engine
   namespace: hybridsoc
   labels:
-    app: ai-engine
-    component: analytics
+    app: grc-engine
+    component: compliance
     version: "2.0.0"
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: ai-engine
+      app: grc-engine
   template:
     metadata:
       labels:
-        app: ai-engine
+        app: grc-engine
     spec:
       securityContext:
         runAsNonRoot: true
@@ -24,10 +24,10 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - name: ai-engine
-          image: hybridsoc/ai-engine:2.0.0
+        - name: grc-engine
+          image: hybridsoc/grc-engine:2.0.0
           ports:
-            - containerPort: 8000
+            - containerPort: 8001
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -35,21 +35,21 @@ spec:
               drop: ["ALL"]
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "250m"
+              memory: "128Mi"
+              cpu: "100m"
             limits:
-              memory: "1Gi"
-              cpu: "1000m"
+              memory: "512Mi"
+              cpu: "500m"
           livenessProbe:
             httpGet:
               path: /health
-              port: 8000
-            initialDelaySeconds: 30
+              port: 8001
+            initialDelaySeconds: 20
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /health
-              port: 8000
+              port: 8001
             initialDelaySeconds: 10
             periodSeconds: 5
           volumeMounts:
@@ -62,12 +62,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ai-engine
+  name: grc-engine
   namespace: hybridsoc
 spec:
   selector:
-    app: ai-engine
+    app: grc-engine
   ports:
-    - port: 8000
-      targetPort: 8000
+    - port: 8001
+      targetPort: 8001
   type: ClusterIP
