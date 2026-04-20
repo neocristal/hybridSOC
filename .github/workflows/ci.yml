@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   # ── Security Scan ─────────────────────────────────────────────────
   security-scan:
@@ -81,6 +84,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-ai-engine, build-grc-engine, build-api-gateway]
     if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
 
