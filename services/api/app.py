@@ -37,6 +37,8 @@ DB_PATH = os.getenv("SQLITE_DB_PATH", str(BASE_DIR / "hybridsoc.db"))
 SUPERADMIN_EMAIL = os.getenv("SUPERADMIN_EMAIL", "superadmin@hybridsoc.example.com")
 SUPERADMIN_PASSWORD = os.getenv("SUPERADMIN_PASSWORD", "ChangeMeNow!123")
 ACCESS_TOKEN_TTL_MINUTES = int(os.getenv("ACCESS_TOKEN_TTL_MINUTES", "60"))
+PBKDF2_ITERATIONS = int(os.getenv("PBKDF2_ITERATIONS", "310000"))
+PBKDF2_SALT_BYTES = 16
 
 SMTP_HOST = os.getenv("SMTP_HOST", "localhost")
 SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
@@ -138,9 +140,28 @@ def now_utc() -> str:
 
 
 def hash_password(raw: str) -> str:
-    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+    salt = secrets.token_bytes(PBKDF2_SALT_BYTES)
+    digest = hashlib.pbkdf2_hmac("sha256", raw.encode("utf-8"), salt, PBKDF2_ITERATIONS)
+    return "pbkdf2_sha256${}${}${}".format(
+        PBKDF2_ITERATIONS,
+        base64.b64encode(salt).decode("ascii"),
+        base64.b64encode(digest).decode("ascii"),
+    )
 
 
+def verify_password(raw: str, stored: str) -> bool:
+    try:
+        algorithm, iterations_str, salt_b64, digest_b64 = stored.split("$", 3)
+        if algorithm != "pbkdf2_sha256":
+            return False
+        iterations = int(iterations_str)
+        salt = base64.b64decode(salt_b64.encode("ascii"))
+        expected = base64.b64decode(digest_b64.encode("ascii"))
+    except (ValueError, TypeError):
+        return False
+
+    computed = hashlib.pbkdf2_hmac("sha256", raw.encode("utf-8"), salt, iterations)
+    return hmac.compare_digest(computed, expected)
 
 
 def generate_totp_secret() -> str:
@@ -352,7 +373,7 @@ def login(payload: LoginRequest):
     conn = db_connect()
     user = conn.execute("SELECT * FROM users WHERE email = ? AND is_active = 1", (payload.email.lower(),)).fetchone()
     conn.close()
-    if not user or user["password_hash"] != hash_password(payload.password):
+    if not user or not verify_password(payload.password, user["password_hash"]):
         _audit("login_failed", actor=payload.email)
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
