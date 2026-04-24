@@ -18,6 +18,34 @@ HybridSOC is a next-generation Security Operations Center combining:
 
 ---
 
+## Python Web Platform (Admin + Analytics)
+
+This project supports a **Python-based website architecture** with:
+
+- **Admin backend** for user, role, policy, and incident administration
+- **Frontend analytics views** for SOC statistics, KPIs, and security graphics/charts
+- **API control layer** for secure service orchestration and endpoint governance
+- **Connection management** between internal microservices and external security tools
+
+### Suggested Implementation Pattern
+
+- **Backend (Python/FastAPI)**
+  - Admin modules: users, tenants, RBAC, case/incident workflow
+  - API management: rate limits, auth, request validation, audit trails
+  - Integrations: SIEM/SOAR/threat intel connectors with health checks
+- **Frontend (Dashboard UI)**
+  - Security statistics: alerts by severity, MTTR, detection coverage
+  - Graphics: trend lines, risk heatmaps, incident distribution charts
+  - Operational views: connection status and synchronization metrics
+- **Control Plane**
+  - API gateway enforcement and token validation
+  - Service-to-service trust policies
+  - Unified observability for connection reliability and failures
+
+This model enables centralized administration while giving analysts real-time visual insight into platform health, risk posture, and security operations performance.
+
+---
+
 ## Architecture
 
 ```
