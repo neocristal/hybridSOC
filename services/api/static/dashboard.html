@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HybridSOC Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#0b1220; color:#e6edf7; margin:0; }
+    header { padding:16px 24px; border-bottom:1px solid #1f2a44; }
+    .wrap { padding:20px; display:grid; grid-template-columns:repeat(2, minmax(320px, 1fr)); gap:16px; }
+    .card { background:#111a2e; border:1px solid #1f2a44; border-radius:10px; padding:14px; }
+    .kpi { display:flex; gap:12px; flex-wrap:wrap; }
+    .pill { background:#17233f; padding:8px 10px; border-radius:8px; }
+    .ok { color:#59d499; }
+    .warn { color:#f4c96a; }
+    ul { margin: 8px 0 0; padding-left: 18px; }
+    .muted { color:#9db0d0; font-size:12px; }
+    .bar { height:10px; background:#22345f; border-radius:10px; overflow:hidden; }
+    .bar > span { display:block; height:10px; background:#2a7fff; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>HybridSOC Security Operations Dashboard</h1>
+  <div class="muted">Token: <code>hybridsoc-admin-token</code> | Endpoint: <code>/dashboard/metrics</code></div>
+</header>
+<div class="wrap">
+  <section class="card">
+    <h3>Security statistics</h3>
+    <div id="severity" class="kpi"></div>
+    <p id="mttr"></p>
+    <p id="coverage"></p>
+  </section>
+
+  <section class="card">
+    <h3>Trend line (alerts/day)</h3>
+    <svg id="trend" width="100%" height="170" viewBox="0 0 320 170"></svg>
+  </section>
+
+  <section class="card">
+    <h3>Risk heatmap</h3>
+    <div id="heatmap"></div>
+  </section>
+
+  <section class="card">
+    <h3>Incident distribution</h3>
+    <ul id="incidents"></ul>
+  </section>
+
+  <section class="card" style="grid-column: span 2;">
+    <h3>Operational views: connector status + sync metrics</h3>
+    <ul id="ops"></ul>
+  </section>
+</div>
+
+<script>
+const headers = { Authorization: 'Bearer hybridsoc-admin-token' };
+
+function avg(items){ return (items.reduce((a,b)=>a+b,0)/items.length).toFixed(2); }
+
+fetch('/dashboard/metrics', { headers })
+  .then(r => r.json())
+  .then(data => {
+    const sev = document.getElementById('severity');
+    Object.entries(data.alerts_by_severity).forEach(([name, count]) => {
+      const div = document.createElement('div');
+      div.className = 'pill';
+      div.innerHTML = `<strong>${name.toUpperCase()}</strong>: ${count}`;
+      sev.appendChild(div);
+    });
+
+    document.getElementById('mttr').textContent = `MTTR (avg): ${avg(data.mttr_hours)} hours`;
+    document.getElementById('coverage').textContent = `Detection coverage (latest): ${data.detection_coverage.at(-1)}%`;
+
+    const svg = document.getElementById('trend');
+    const vals = data.trend_line_alerts;
+    const max = Math.max(...vals);
+    const points = vals.map((v, i) => `${10 + i*45},${150 - (v / max) * 120}`).join(' ');
+    svg.innerHTML = `<polyline fill="none" stroke="#2a7fff" stroke-width="3" points="${points}" />`;
+
+    const heat = document.getElementById('heatmap');
+    data.risk_heatmap.forEach(item => {
+      const row = document.createElement('div');
+      row.innerHTML = `<div>${item.domain} (${Math.round(item.risk*100)}%)</div><div class='bar'><span style='width:${Math.round(item.risk*100)}%'></span></div>`;
+      row.style.marginBottom = '8px';
+      heat.appendChild(row);
+    });
+
+    const inc = document.getElementById('incidents');
+    data.incident_distribution.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = `${item.stage}: ${item.count}`;
+      inc.appendChild(li);
+    });
+
+    const ops = document.getElementById('ops');
+    data.operational_status.forEach(item => {
+      const li = document.createElement('li');
+      const cls = item.status === 'connected' ? 'ok' : 'warn';
+      li.innerHTML = `<strong>${item.name}</strong> (${item.type}) - <span class='${cls}'>${item.status}</span>, latency ${item.latency_ms}ms, sync lag ${item.sync_lag_seconds}s`;
+      ops.appendChild(li);
+    });
+  })
+  .catch(() => {
+    document.body.insertAdjacentHTML('beforeend', '<p style="padding:20px;color:#ff9090;">Failed to load dashboard metrics.</p>');
+  });
+</script>
+</body>
+</html>
