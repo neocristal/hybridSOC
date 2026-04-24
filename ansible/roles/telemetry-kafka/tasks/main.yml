@@ -1,0 +1,9 @@
+---
+- name: Telemetry Collection | Validate Kafka bootstrap
+  ansible.builtin.assert:
+    that:
+      - kafka_bootstrap_servers is defined
+
+- name: Telemetry Collection | Summary
+  ansible.builtin.debug:
+    msg: "Kafka bootstrap servers: {{ kafka_bootstrap_servers }}"

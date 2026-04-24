@@ -1,0 +1,12 @@
+---
+- name: SIEM Layer | Validate Wazuh + Elastic endpoints
+  ansible.builtin.assert:
+    that:
+      - wazuh_manager_url is defined
+      - elastic_url is defined
+
+- name: SIEM Layer | Summary
+  ansible.builtin.debug:
+    msg:
+      - "Wazuh manager: {{ wazuh_manager_url }}"
+      - "Elastic endpoint: {{ elastic_url }}"

@@ -124,6 +124,73 @@ docker compose up -d
 | AI Engine | http://localhost:8000/docs | — |
 | GRC API | http://localhost:8001/docs | — |
 
+### Run Admin Backend + Dashboard Frontend
+
+You can run the new **Admin API backend** and **dashboard frontend** in either local Python mode or Docker mode.
+
+#### Option A: Local Python (FastAPI + static frontend)
+
+```bash
+cd services/api
+cp .env.example .env
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app:app --host 0.0.0.0 --port 8002 --reload
+```
+
+Open:
+- API docs: `http://localhost:8002/docs`
+- Dashboard UI (frontend): `http://localhost:8002/dashboard`
+
+Authentication flow:
+1. Login with email/password at `POST /auth/login`
+2. Request MFA challenge via `POST /auth/mfa/challenge` using either:
+   - `email_otp` (SMTP-delivered OTP)
+   - `google_totp` (Google Authenticator-compatible OTP)
+3. Verify OTP at `POST /auth/mfa/verify` to receive a Bearer access token.
+
+Default bootstrap superadmin (change in `.env`):
+- Email: `superadmin@hybridsoc.example.com`
+- Password: `ChangeMeNow!123`
+
+
+#### IAM + PAM Notes
+
+- **HashiCorp Vault PAM** is modeled as the primary IAM integration endpoint (`VAULT_ADDR`, `VAULT_ROLE`) and is used for user-provisioning sync hooks.
+- **Keycloak SSO** is modeled as the federated SSO integration endpoint (`KEYCLOAK_URL`, `KEYCLOAK_REALM`).
+- SQLite is used as the local metadata/auth fallback store for development.
+
+#### Option B: Docker Compose
+
+From the `docker/` folder:
+
+```bash
+cd docker
+docker compose up -d admin-api
+```
+
+Open:
+- API docs: `http://localhost:8002/docs`
+- Dashboard UI: `http://localhost:8002/dashboard`
+
+
+
+### Ansible Deployment Baseline
+
+```bash
+cd ansible
+ansible-playbook -i inventories/hosts.ini site.yml
+```
+
+The playbook includes role scaffolding for:
+- Network Security Layer (OPNsense, Suricata, Zeek)
+- Telemetry Collection (Kafka)
+- SIEM (Wazuh + Elastic)
+- Threat Intelligence (MISP + OpenCTI)
+- AI Analytics Engine (FastAPI + ML pipeline)
+- SOAR (TheHive + Cortex + Shuffle)
+
 ### Kubernetes (Enterprise)
 
 ```bash

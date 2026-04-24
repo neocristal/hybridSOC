@@ -1,0 +1,13 @@
+---
+- name: HybridSOC Infrastructure Baseline
+  hosts: hybridsoc_nodes
+  become: true
+  vars:
+    deploy_mode: docker
+  roles:
+    - network-security
+    - telemetry-kafka
+    - siem-wazuh
+    - threat-intel
+    - ai-analytics
+    - soar-stack
