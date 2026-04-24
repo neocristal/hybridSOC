@@ -1,0 +1,14 @@
+---
+- name: SOAR Layer | Validate TheHive/Cortex/Shuffle endpoints
+  ansible.builtin.assert:
+    that:
+      - thehive_url is defined
+      - cortex_url is defined
+      - shuffle_url is defined
+
+- name: SOAR Layer | Summary
+  ansible.builtin.debug:
+    msg:
+      - "TheHive: {{ thehive_url }}"
+      - "Cortex: {{ cortex_url }}"
+      - "Shuffle: {{ shuffle_url }}"

@@ -1,0 +1,16 @@
+---
+opnsense_api_url: "https://opnsense.local"
+suricata_config_path: "/etc/suricata/suricata.yaml"
+zeek_config_path: "/opt/zeek/etc/node.cfg"
+
+kafka_bootstrap_servers: "kafka:9092"
+wazuh_manager_url: "https://wazuh-manager:55000"
+elastic_url: "https://wazuh-indexer:9200"
+
+misp_url: "https://misp:443"
+opencti_url: "http://opencti:8080"
+
+aiengine_url: "http://ai-engine:8000"
+thehive_url: "http://thehive:9000"
+cortex_url: "http://cortex:9001"
+shuffle_url: "http://shuffle:3001"

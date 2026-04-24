@@ -153,6 +153,18 @@ services:
       - no-new-privileges:true
     networks: [hybridsoc]
 
+  # ── HybridSOC Admin API + Dashboard ─────────────────────────────
+  admin-api:
+    build: ../services/api
+    restart: unless-stopped
+    ports:
+      - "8002:8002"
+    env_file:
+      - ./.env
+    security_opt:
+      - no-new-privileges:true
+    networks: [hybridsoc]
+
   # ── HybridSOC API Gateway ─────────────────────────────────────────
   api-gateway:
     build: ../services/api-gateway

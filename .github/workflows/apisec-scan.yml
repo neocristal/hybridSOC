@@ -35,28 +35,41 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Validate API discovery configuration
+      - name: Resolve API discovery configuration
+        id: config
+        env:
+          INPUT_ENDPOINT: ${{ github.event.inputs['api-endpoint'] }}
+          INPUT_TOKEN: ${{ github.event.inputs['api-token'] }}
+          SECRET_ENDPOINT: ${{ secrets.API_DISCOVERY_ENDPOINT }}
+          SECRET_TOKEN: ${{ secrets.API_DISCOVERY_TOKEN }}
         run: |
-          if [ -z "$API_ENDPOINT" ]; then
-            echo "Missing API endpoint. Set workflow input 'api-endpoint' or secret API_DISCOVERY_ENDPOINT."
-            exit 1
-          fi
-          if [ -z "$API_TOKEN" ]; then
-            echo "Missing API token. Set workflow input 'api-token' or secret API_DISCOVERY_TOKEN."
-            exit 1
+          API_ENDPOINT="${INPUT_ENDPOINT:-$SECRET_ENDPOINT}"
+          API_TOKEN="${INPUT_TOKEN:-$SECRET_TOKEN}"
+
+          if [ -z "$API_ENDPOINT" ] || [ -z "$API_TOKEN" ]; then
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "api_endpoint=" >> "$GITHUB_OUTPUT"
+            echo "api_token=" >> "$GITHUB_OUTPUT"
+            echo "Skipping API discovery scan: missing endpoint/token configuration."
+          else
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "api_endpoint=$API_ENDPOINT" >> "$GITHUB_OUTPUT"
+            echo "api_token=$API_TOKEN" >> "$GITHUB_OUTPUT"
           fi
 
       - name: API discovery action
+        if: steps.config.outputs.should_run == 'true'
         uses: apisec-inc/apisec-run-scan@025432089674a28ba8fb55f8ab06c10215e772ea
         with:
           apisec-username: ${{ secrets.apisec_username }}
           apisec-password: ${{ secrets.apisec_password }}
           apisec-project: "VAmPI"
           sarif-result-file: "apisec-results.sarif"
-          api-endpoint: ${{ env.API_ENDPOINT }}
-          api-token: ${{ env.API_TOKEN }}
+          api-endpoint: ${{ steps.config.outputs.api_endpoint }}
+          api-token: ${{ steps.config.outputs.api_token }}
 
       - name: Upload SARIF report
+        if: steps.config.outputs.should_run == 'true'
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ./apisec-results.sarif
@@ -65,7 +78,12 @@ jobs:
         run: |
           {
             echo "## API Discovery Scan";
-            echo "- Endpoint: \`$API_ENDPOINT\`";
             echo "- Trigger: \`${{ github.event_name }}\`";
-            echo "- Result: SARIF uploaded";
+            echo "- Config present: \`${{ steps.config.outputs.should_run }}\`";
+            if [ "${{ steps.config.outputs.should_run }}" = "true" ]; then
+              echo "- Endpoint: \`${{ steps.config.outputs.api_endpoint }}\`";
+              echo "- Result: SARIF uploaded";
+            else
+              echo "- Result: skipped (set API_DISCOVERY_ENDPOINT and API_DISCOVERY_TOKEN secrets or provide workflow inputs).";
+            fi
           } >> "$GITHUB_STEP_SUMMARY"

@@ -22,7 +22,9 @@
 <body>
 <header>
   <h1>HybridSOC Security Operations Dashboard</h1>
-  <div class="muted">Token: <code>hybridsoc-admin-token</code> | Endpoint: <code>/dashboard/metrics</code></div>
+  <div class="muted">Use a bearer token from <code>/auth/login</code> + MFA verify, then load <code>/dashboard/metrics</code>.</div>
+  <input id="tokenInput" placeholder="Paste Bearer token" style="width:360px;padding:8px;border-radius:8px;border:1px solid #1f2a44;background:#0b1220;color:#e6edf7;"/>
+  <button id="loadBtn" style="padding:8px 12px;border-radius:8px;border:0;background:#2a7fff;color:#fff;">Load Metrics</button>
 </header>
 <div class="wrap">
   <section class="card">
@@ -54,13 +56,9 @@
 </div>
 
 <script>
-const headers = { Authorization: 'Bearer hybridsoc-admin-token' };
-
 function avg(items){ return (items.reduce((a,b)=>a+b,0)/items.length).toFixed(2); }
 
-fetch('/dashboard/metrics', { headers })
-  .then(r => r.json())
-  .then(data => {
+function render(data){
     const sev = document.getElementById('severity');
     Object.entries(data.alerts_by_severity).forEach(([name, count]) => {
       const div = document.createElement('div');
@@ -100,10 +98,26 @@ fetch('/dashboard/metrics', { headers })
       li.innerHTML = `<strong>${item.name}</strong> (${item.type}) - <span class='${cls}'>${item.status}</span>, latency ${item.latency_ms}ms, sync lag ${item.sync_lag_seconds}s`;
       ops.appendChild(li);
     });
-  })
-  .catch(() => {
-    document.body.insertAdjacentHTML('beforeend', '<p style="padding:20px;color:#ff9090;">Failed to load dashboard metrics.</p>');
-  });
+  }
+
+function loadMetrics(){
+  const token = document.getElementById('tokenInput').value.trim();
+  if (!token){
+    alert('Paste a bearer token first.');
+    return;
+  }
+  fetch('/dashboard/metrics', { headers: { Authorization: `Bearer ${token}` } })
+    .then(r => {
+      if (!r.ok) throw new Error('Unauthorized or request failed');
+      return r.json();
+    })
+    .then(render)
+    .catch(() => {
+      document.body.insertAdjacentHTML('beforeend', '<p style="padding:20px;color:#ff9090;">Failed to load dashboard metrics. Verify token/login/MFA.</p>');
+    });
+}
+
+document.getElementById('loadBtn').addEventListener('click', loadMetrics);
 </script>
 </body>
 </html>

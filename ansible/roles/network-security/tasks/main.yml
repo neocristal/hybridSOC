@@ -1,0 +1,14 @@
+---
+- name: Network Security Layer | Validate OPNsense/Suricata/Zeek variables
+  ansible.builtin.assert:
+    that:
+      - opnsense_api_url is defined
+      - suricata_config_path is defined
+      - zeek_config_path is defined
+
+- name: Network Security Layer | Summary
+  ansible.builtin.debug:
+    msg:
+      - "OPNsense API: {{ opnsense_api_url }}"
+      - "Suricata config: {{ suricata_config_path }}"
+      - "Zeek config: {{ zeek_config_path }}"

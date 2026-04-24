@@ -1,0 +1,12 @@
+---
+- name: Threat Intelligence | Validate MISP + OpenCTI endpoints
+  ansible.builtin.assert:
+    that:
+      - misp_url is defined
+      - opencti_url is defined
+
+- name: Threat Intelligence | Summary
+  ansible.builtin.debug:
+    msg:
+      - "MISP: {{ misp_url }}"
+      - "OpenCTI: {{ opencti_url }}"

@@ -1,0 +1,9 @@
+---
+- name: AI Analytics Engine | Validate service endpoint
+  ansible.builtin.assert:
+    that:
+      - aiengine_url is defined
+
+- name: AI Analytics Engine | Summary
+  ansible.builtin.debug:
+    msg: "AI engine endpoint: {{ aiengine_url }}"
