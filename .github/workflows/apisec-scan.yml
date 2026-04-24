@@ -24,6 +24,12 @@ jobs:
   api-discovery:
     name: Run API discovery action
     runs-on: ubuntu-latest
+    env:
+      # Configure these in repository settings -> Secrets and variables -> Actions
+      # - API_DISCOVERY_ENDPOINT
+      # - API_DISCOVERY_TOKEN
+      API_ENDPOINT: ${{ inputs['api-endpoint'] || secrets.API_DISCOVERY_ENDPOINT }}
+      API_TOKEN: ${{ inputs['api-token'] || secrets.API_DISCOVERY_TOKEN }}
 
     steps:
       - name: Checkout repository

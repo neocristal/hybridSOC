@@ -44,7 +44,12 @@ jobs:
           pip install pytest httpx
 
       - name: Run tests
-        run: pytest services/ai-engine/tests/ -v --tb=short || true
+        run: |
+          if [ -d "services/ai-engine/tests/" ]; then
+            pytest services/ai-engine/tests/ -v --tb=short
+          else
+            echo "No tests found, skipping..."
+          fi
 
       - name: Build Docker image
         run: docker build -t hybridsoc/ai-engine:${{ github.sha }} ./services/ai-engine

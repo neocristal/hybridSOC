@@ -191,6 +191,7 @@ def verify_totp(secret: str, code: str, window: int = 1) -> bool:
 def totp_provisioning_uri(email: str, secret: str, issuer: str = "HybridSOC") -> str:
     return f"otpauth://totp/{issuer}:{email}?secret={secret}&issuer={issuer}&algorithm=SHA1&digits=6&period=30"
 
+# ── API security, validation, and audit helpers ──────────────────────────────
 def _audit(event: str, actor: str, details: dict | None = None) -> None:
     audit_trail.append(
         {
