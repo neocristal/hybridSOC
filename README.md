@@ -134,20 +134,36 @@ hashing (260 000 iterations + per-user salt + global pepper), TOTP MFA, Email
 OTP, and Cloudflare Turnstile. Frontend: React 18.3 / Vite, plain JSX with
 inline CSS. Full reference: [`services/web/README.md`](services/web/README.md).
 
-#### One-shot install (Linux/macOS)
+#### One-shot install
+
+JS toolchain: **Bun** is preferred (faster install, single binary). Both
+installers fall back to Node.js 20.x + npm if Bun is unavailable.
+
+**Linux / macOS (bash):**
 
 ```bash
 bash scripts/install-web.sh           # backend + frontend build
-bash scripts/install-web.sh --dev     # backend + npm install only (no build)
+bash scripts/install-web.sh --dev     # deps only, skip build
 bash scripts/install-web.sh --no-frontend
 ```
 
-The script detects Python 3.10+, installs Node.js 20.x via NodeSource on
-Debian/Ubuntu when missing, creates `services/web/.venv`, installs Python deps,
-seeds `services/web/.env` with a freshly generated `FLASK_SECRET_KEY` and
-`HYBRIDSOC_PEPPER`, runs migrations, and bootstraps the superadmin.
+**Windows (PowerShell):**
+
+```powershell
+.\scripts\install-web.ps1             # backend + frontend build
+.\scripts\install-web.ps1 -Dev
+.\scripts\install-web.ps1 -NoFrontend
+# If blocked: Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+Both scripts detect Python 3.10+, ensure a JS runtime is present (Bun
+preferred, Node.js fallback), create `services/web/.venv`, install Python
+deps, seed `services/web/.env` with a generated `FLASK_SECRET_KEY` and
+`HYBRIDSOC_PEPPER`, run migrations, and bootstrap the superadmin.
 
 #### Start the backend (Flask)
+
+**Linux / macOS:**
 
 ```bash
 cd services/web
@@ -157,31 +173,46 @@ python -m services.web.migrate                # apply pending migrations (idempo
 python -m services.web.app                    # http://localhost:5000
 ```
 
-The Flask app serves the built React bundle on the same port, so once the
-frontend has been built the dashboard is reachable directly at
-`http://localhost:5000/`. Health probe: `GET /api/health`.
+**Windows (PowerShell):**
 
-For production / multi-worker:
+```powershell
+cd services\web
+.\.venv\Scripts\Activate.ps1
+Get-Content .env | ForEach-Object { if ($_ -match '^([^=]+)=(.*)') { [Environment]::SetEnvironmentVariable($matches[1], $matches[2], 'Process') } }
+python -m services.web.migrate
+python -m services.web.app                    # http://localhost:5000
+```
+
+Flask serves the built React bundle on the same port — once built, the
+dashboard is reachable at `http://localhost:5000/`. Health probe: `GET /api/health`.
+
+For production multi-worker (Linux/macOS):
 
 ```bash
 gunicorn -w 4 -b 0.0.0.0:5000 'services.web.app:create_app()'
 ```
 
+On Windows use `waitress` (`pip install waitress; waitress-serve --listen=0.0.0.0:5000 'services.web.app:create_app()'`)
+or run behind IIS.
+
 #### Start the frontend (React + Vite)
 
-For hot-reload during development (separate terminal from the backend):
+**Bun (preferred — works identically on Linux/macOS/Windows):**
 
 ```bash
 cd services/web/frontend
-npm install                                   # first time only
-npm run dev                                   # http://localhost:5173 → /api proxied to :5000
+bun install                                   # first time only
+bun run dev                                   # http://localhost:5173 → /api proxied to :5000
+bun run build                                 # production output to ./dist
 ```
 
-For a production build (output is served by Flask from `frontend/dist/`):
+**npm fallback:**
 
 ```bash
 cd services/web/frontend
-npm run build                                 # produces ./dist
+npm install
+npm run dev
+npm run build
 ```
 
 Then start Flask as above and open `http://localhost:5000/`.
