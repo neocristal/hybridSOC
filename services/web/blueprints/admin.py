@@ -52,8 +52,15 @@ def update_user(user_id: int):
     if not fields:
         return jsonify(error="no_fields"), 400
     db = get_db()
-    placeholders = ", ".join(f"{k} = ?" for k in fields)
-    db.execute(f"UPDATE users SET {placeholders} WHERE id = ?", (*fields.values(), user_id))
+    if "role" in fields and "active" in fields:
+        db.execute(
+            "UPDATE users SET role = ?, active = ? WHERE id = ?",
+            (fields["role"], fields["active"], user_id),
+        )
+    elif "role" in fields:
+        db.execute("UPDATE users SET role = ? WHERE id = ?", (fields["role"], user_id))
+    elif "active" in fields:
+        db.execute("UPDATE users SET active = ? WHERE id = ?", (fields["active"], user_id))
     db.commit()
     write_audit(user_id=g.user["id"], action="user_updated", details=f"id={user_id} fields={list(fields)}")
     return jsonify(ok=True)
