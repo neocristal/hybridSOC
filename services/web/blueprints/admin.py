@@ -1,13 +1,17 @@
 """User and tenant administration."""
 from __future__ import annotations
 
-from flask import Blueprint, g, jsonify, request
+import sqlite3
+
+from flask import Blueprint, current_app, g, jsonify, request
 
 from ..audit import write_audit
 from ..auth import hash_password, login_required
 from ..db import get_db
 
 bp = Blueprint("admin", __name__)
+
+VALID_ROLES = {"analyst", "manager", "compliance", "admin", "superadmin"}
 
 
 @bp.get("/users")
@@ -28,6 +32,8 @@ def create_user():
     role = body.get("role", "analyst")
     if not email or not password:
         return jsonify(error="email_and_password_required"), 400
+    if role not in VALID_ROLES:
+        return jsonify(error="invalid_role"), 400
     salt, pw_hash = hash_password(password)
     db = get_db()
     try:
@@ -37,8 +43,10 @@ def create_user():
             (email, salt, pw_hash, role),
         )
         db.commit()
-    except Exception:
-        bp.logger.exception("Failed to create user")
+    except sqlite3.IntegrityError:
+        return jsonify(error="email_already_exists"), 409
+    except sqlite3.DatabaseError:
+        current_app.logger.exception("Failed to create user")
         return jsonify(error="user_creation_failed"), 400
     write_audit(user_id=g.user["id"], action="user_created", details=f"new_id={cur.lastrowid} email={email}")
     return jsonify(id=cur.lastrowid, email=email, role=role), 201
@@ -48,22 +56,30 @@ def create_user():
 @login_required("admin", "superadmin")
 def update_user(user_id: int):
     body = request.get_json(silent=True) or {}
-    allowed = {"role", "active"}
-    fields = {k: v for k, v in body.items() if k in allowed}
-    if not fields:
+    has_role = "role" in body
+    has_active = "active" in body
+    if not (has_role or has_active):
         return jsonify(error="no_fields"), 400
+    if has_role and body["role"] not in VALID_ROLES:
+        return jsonify(error="invalid_role"), 400
+
+    role = body["role"] if has_role else None
+    active = (1 if body["active"] else 0) if has_active else None
+
     db = get_db()
-    if "role" in fields and "active" in fields:
+    if has_role and has_active:
         db.execute(
             "UPDATE users SET role = ?, active = ? WHERE id = ?",
-            (fields["role"], fields["active"], user_id),
+            (role, active, user_id),
         )
-    elif "role" in fields:
-        db.execute("UPDATE users SET role = ? WHERE id = ?", (fields["role"], user_id))
-    elif "active" in fields:
-        db.execute("UPDATE users SET active = ? WHERE id = ?", (fields["active"], user_id))
+    elif has_role:
+        db.execute("UPDATE users SET role = ? WHERE id = ?", (role, user_id))
+    else:
+        db.execute("UPDATE users SET active = ? WHERE id = ?", (active, user_id))
     db.commit()
-    write_audit(user_id=g.user["id"], action="user_updated", details=f"id={user_id} fields={list(fields)}")
+
+    touched = [n for n, present in (("role", has_role), ("active", has_active)) if present]
+    write_audit(user_id=g.user["id"], action="user_updated", details=f"id={user_id} fields={touched}")
     return jsonify(ok=True)
 
 
