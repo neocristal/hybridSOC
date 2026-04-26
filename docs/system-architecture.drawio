@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T00:00:00.000Z" agent="HybridSOC" version="24.0.0" type="device">
+  <diagram id="hybridsoc-arch" name="HybridSOC Architecture">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TITLE -->
+        <mxCell id="title" value="HybridSOC v2.0.0 — System Architecture (Seven-Layer Model + Microservices)" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1180" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- L1 ENDPOINTS -->
+        <mxCell id="l1" value="L1 · Users / Devices / Endpoints" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="1180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="l1a" value="Analysts &amp; Admins" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="80" y="100" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l1b" value="Velociraptor / osquery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="290" y="100" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l1c" value="Wazuh Agents" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="500" y="100" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l1d" value="Bitdefender / EDR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="710" y="100" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l1e" value="Browsers / Mobile / IoT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="920" y="100" width="280" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- L2 IDENTITY -->
+        <mxCell id="l2" value="L2 · Identity — IAM / SSO / MFA / PAM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="170" width="1180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="l2a" value="Keycloak SSO (OIDC / SAML)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="80" y="200" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l2b" value="HashiCorp Vault PAM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="350" y="200" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l2c" value="TOTP / Email OTP MFA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="620" y="200" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l2d" value="Entra ID Federation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="890" y="200" width="310" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- L3 ZERO TRUST -->
+        <mxCell id="l3" value="L3 · Zero Trust Gateway (NIST SP 800-207)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="270" width="1180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="l3a" value="ZTNA Policy Engine — continuous identity / device / context verification" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="80" y="300" width="1120" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- L4 NETWORK -->
+        <mxCell id="l4" value="L4 · Network Security" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="360" width="1180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="l4a" value="OPNsense / pfSense Firewall" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="80" y="390" width="350" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l4b" value="Suricata IDS/IPS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="450" y="390" width="350" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l4c" value="Zeek NSM (conn / dns / http logs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="820" y="390" width="380" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- L5 KAFKA -->
+        <mxCell id="l5" value="L5 · Kafka Streaming Backbone (telemetry fusion)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="460" width="1180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="l5a" value="Topic: soc-alerts" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="120" y="490" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l5b" value="Topic: network-events" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="380" y="490" width="220" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l5c" value="Topic: network-flows" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="660" y="490" width="220" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l5d" value="Topic: api-logs" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="940" y="490" width="220" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- L6 ANALYTICS -->
+        <mxCell id="l6" value="L6 · SOC Analytics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="560" width="1180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="l6a" value="SIEM — Wazuh Manager + Elastic Stack&#xa;(50+ MITRE ATT&amp;CK correlation rules)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="80" y="590" width="350" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="l6b" value="Threat Intel — MISP + OpenCTI&#xa;IoC enrichment / TIP feeds" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="450" y="590" width="350" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="l6c" value="AI Engine :8000 — FastAPI&#xa;Isolation Forest · LSTM · Graph ML&#xa;FAISS RAG · Mistral-7B" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="820" y="590" width="380" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- L7 RESPONSE + GRC -->
+        <mxCell id="l7" value="L7 · Automation, Response &amp; GRC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="700" width="1180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="l7a" value="SOAR — TheHive + Cortex + Shuffle&#xa;(case mgmt · analysers · playbooks)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="80" y="730" width="350" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="l7b" value="GRC Engine :8001&#xa;ISO 27001 · DORA · NIS2 · GDPR · EU AI Act&#xa;Risk register · TPRM · timers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="450" y="730" width="350" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="l7c" value="DocGen + Reporting&#xa;DPIA · BCP · IR reports (DOCX/PDF)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="820" y="730" width="380" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- CONTROL PLANE -->
+        <mxCell id="cp" value="Control Plane (Microservices)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="840" width="1180" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="cpa" value="API Gateway :8080 (FastAPI)&#xa;auth · rate-limit · routing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="80" y="870" width="350" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cpb" value="Admin API + Dashboard :8002&#xa;users · tenants · KPIs · charts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="450" y="870" width="350" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cpc" value="Persistence: SQLite WAL (hash-chain audit) · Elasticsearch · Git-LFS model store" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="820" y="870" width="380" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- DEPLOYMENT TOPOLOGY -->
+        <mxCell id="dep" value="Hybrid Deployment — On-Prem (Wazuh, Keycloak, OPNsense, EDR)  ↔  Cloud (Elastic, Kafka, K8s, AI Engine)  ↔  MSSP (TI sharing, shared SOC)" style="text;html=1;align=center;verticalAlign=middle;fontStyle=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="950" width="1180" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- VERTICAL FLOW ARROWS (left edge) -->
+        <mxCell id="e1" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=2;" edge="1" parent="1" source="l1" target="l2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=2;" edge="1" parent="1" source="l2" target="l3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=2;" edge="1" parent="1" source="l3" target="l4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=2;" edge="1" parent="1" source="l4" target="l5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=2;" edge="1" parent="1" source="l5" target="l6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=2;" edge="1" parent="1" source="l6" target="l7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=2;" edge="1" parent="1" source="l7" target="cp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- AI -> SOAR escalation (annotated) -->
+        <mxCell id="ea" value="risk_score ≥ 75" style="endArrow=classic;html=1;strokeColor=#d79b00;strokeWidth=2;dashed=1;fontColor=#7f5800;fontSize=11;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="l6c" target="l7a">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
