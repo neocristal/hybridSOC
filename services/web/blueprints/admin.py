@@ -37,8 +37,9 @@ def create_user():
             (email, salt, pw_hash, role),
         )
         db.commit()
-    except Exception as e:
-        return jsonify(error=str(e)), 400
+    except Exception:
+        bp.logger.exception("Failed to create user")
+        return jsonify(error="user_creation_failed"), 400
     write_audit(user_id=g.user["id"], action="user_created", details=f"new_id={cur.lastrowid} email={email}")
     return jsonify(id=cur.lastrowid, email=email, role=role), 201
 
