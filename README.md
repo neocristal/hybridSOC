@@ -118,11 +118,99 @@ docker compose up -d
 
 | Service | URL | Default Credentials |
 |---|---|---|
+| HybridSOC Web (Admin + Dashboard) | http://localhost:5000 | superadmin / `ChangeMeNow!123` (override in `services/web/.env`) |
 | Wazuh Dashboard | https://localhost:5601 | admin / (see .env) |
 | TheHive | http://localhost:9000 | admin@thehive.local |
 | Cortex | http://localhost:9001 | admin |
 | AI Engine | http://localhost:8000/docs | — |
 | GRC API | http://localhost:8001/docs | — |
+
+### HybridSOC Web — Flask + React 18.3 (Admin & Analytics)
+
+`services/web/` is the consolidated admin and analytics interface described in
+[`docs/system-design.md`](docs/system-design.md). Backend: Flask 3 with
+blueprints, SQLite (WAL mode) + hash-chained audit log, PBKDF2-SHA256 password
+hashing (260 000 iterations + per-user salt + global pepper), TOTP MFA, Email
+OTP, and Cloudflare Turnstile. Frontend: React 18.3 / Vite, plain JSX with
+inline CSS. Full reference: [`services/web/README.md`](services/web/README.md).
+
+#### One-shot install (Linux/macOS)
+
+```bash
+bash scripts/install-web.sh           # backend + frontend build
+bash scripts/install-web.sh --dev     # backend + npm install only (no build)
+bash scripts/install-web.sh --no-frontend
+```
+
+The script detects Python 3.10+, installs Node.js 20.x via NodeSource on
+Debian/Ubuntu when missing, creates `services/web/.venv`, installs Python deps,
+seeds `services/web/.env` with a freshly generated `FLASK_SECRET_KEY` and
+`HYBRIDSOC_PEPPER`, runs migrations, and bootstraps the superadmin.
+
+#### Start the backend (Flask)
+
+```bash
+cd services/web
+source .venv/bin/activate
+set -a && source .env && set +a              # load FLASK_SECRET_KEY, PEPPER, etc.
+python -m services.web.migrate                # apply pending migrations (idempotent)
+python -m services.web.app                    # http://localhost:5000
+```
+
+The Flask app serves the built React bundle on the same port, so once the
+frontend has been built the dashboard is reachable directly at
+`http://localhost:5000/`. Health probe: `GET /api/health`.
+
+For production / multi-worker:
+
+```bash
+gunicorn -w 4 -b 0.0.0.0:5000 'services.web.app:create_app()'
+```
+
+#### Start the frontend (React + Vite)
+
+For hot-reload during development (separate terminal from the backend):
+
+```bash
+cd services/web/frontend
+npm install                                   # first time only
+npm run dev                                   # http://localhost:5173 → /api proxied to :5000
+```
+
+For a production build (output is served by Flask from `frontend/dist/`):
+
+```bash
+cd services/web/frontend
+npm run build                                 # produces ./dist
+```
+
+Then start Flask as above and open `http://localhost:5000/`.
+
+#### SQLite update service
+
+`services/web/migrate.py` is the schema CLI:
+
+```bash
+python -m services.web.migrate              # apply pending migrations
+python -m services.web.migrate --status     # show applied vs pending
+python -m services.web.migrate --bootstrap  # apply + create superadmin
+python -m services.web.migrate --verify     # re-walk the audit hash chain
+```
+
+Drop a new `0003_*.sql` file in `services/web/migrations/` and the next backend
+start (or `migrate` invocation) will pick it up.
+
+#### Login flow
+
+1. Open `http://localhost:5000/`, sign in with the bootstrap superadmin
+   (`BOOTSTRAP_EMAIL` / `BOOTSTRAP_PASSWORD` from `.env`).
+2. Pick an MFA method:
+   - **Email OTP** — a 6-digit code is sent via SMTP (or printed in the
+     backend log when `SMTP_HOST` is empty).
+   - **Google TOTP** — once enrolled via `POST /api/auth/totp/enroll` and
+     activated via `POST /api/auth/totp/activate`.
+3. After verifying the code you receive a Bearer token; the SPA stores it
+   in `localStorage` and uses it for subsequent `/api/*` calls.
 
 ### Run Admin Backend + Dashboard Frontend
 
