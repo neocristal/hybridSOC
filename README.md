@@ -307,23 +307,56 @@ This platform is grounded in peer-reviewed research:
 
 ```
 hybridsoc/
-├── README.md            ← This file
-├── SECURITY.md          ← Security policy & controls
-├── ARCHITECTURE.md      ← Full architecture documentation
-├── AI.md                ← AI engine design & ethics
-├── INTEGRITY.md         ← Data integrity & trust model
-├── API.md               ← REST API reference
-├── docker/              ← Docker Compose (dev/local)
-├── k8s/                 ← Kubernetes manifests
-├── helm/                ← Helm chart
-├── argo/                ← ArgoCD GitOps application
+├── README.md                       ← This file
+├── SECURITY.md                     ← Security policy & controls
+├── ARCHITECTURE.md                 ← Full architecture documentation
+├── AI.md                           ← AI engine design & ethics
+├── INTEGRITY.md                    ← Data integrity & trust model
+├── API.md                          ← REST API reference
+├── LITERATURE.md                   ← Literature review & standards
+├── LICENSE                         ← MIT License
+│
+├── docs/                           ← Extended documentation
+│   ├── system-design.md            ← Combined SRS + System Design (~990 words)
+│   ├── system-architecture.drawio  ← Editable Draw.io system diagram
+│   ├── system-architecture.mmd     ← Mermaid source of the same diagram
+│   └── index.html                  ← Documentation landing page
+│
 ├── services/
-│   ├── ai-engine/       ← ML/AI microservice (FastAPI)
-│   ├── grc-engine/      ← GRC compliance microservice
-│   └── api-gateway/     ← API gateway / router
-├── kafka/               ← Kafka topic configuration
-├── scripts/             ← setup.sh, deploy.sh
-└── docs/                ← Extended documentation
+│   ├── web/                        ← Flask 3 + React 18.3 admin & analytics UI
+│   │   ├── app.py                  ←   app factory, runs migrations on start
+│   │   ├── config.py               ←   env-driven Config dataclass
+│   │   ├── db.py                   ←   SQLite WAL helper + migration runner
+│   │   ├── auth.py                 ←   PBKDF2, TOTP, Email OTP, Turnstile, sessions
+│   │   ├── audit.py                ←   hash-chained immutable audit log
+│   │   ├── migrate.py              ←   SQLite update service CLI
+│   │   ├── blueprints/             ←   auth / admin / dashboard / risk / grc / audit
+│   │   ├── migrations/             ←   versioned *.sql migration files
+│   │   ├── frontend/               ←   React 18.3 + Vite SPA (Login, MFA, Dashboard, …)
+│   │   └── requirements.txt
+│   ├── ai-engine/                  ← ML / AI microservice (FastAPI)
+│   ├── grc-engine/                 ← GRC compliance microservice
+│   ├── api-gateway/                ← API gateway / router
+│   ├── api/                        ← Legacy admin API (FastAPI, superseded by web/)
+│   ├── ai/                         ← Standalone AI demo service
+│   └── grc/                        ← Standalone GRC demo service
+│
+├── docker/                         ← Docker Compose (dev / local)
+├── docker-compose.yml              ← Top-level compose file
+├── k8s/                            ← Kubernetes manifests (base + overlays)
+├── helm/                           ← Helm chart
+├── argo/                           ← ArgoCD GitOps application
+├── ansible/                        ← Ansible playbooks (OPNsense, Wazuh, Kafka, …)
+├── kafka/                          ← Kafka topic configuration
+├── wazuh/                          ← Wazuh manager configuration
+├── base/                           ← Kustomize base
+├── overlays/                       ← Kustomize overlays
+├── ci/                             ← CI helper assets
+│
+└── scripts/
+    ├── install-web.sh              ← One-shot installer for services/web/
+    ├── setup.sh
+    └── deploy.sh
 ```
 
 ---
