@@ -42,14 +42,33 @@ need_python() {
   [[ "$minor" -ge "$PY_REQUIRED_MINOR" ]] || fail "python3 >= 3.${PY_REQUIRED_MINOR} required (have 3.${minor})"
 }
 
-# ── Node.js (install if missing on Linux via NodeSource) ──────────────────
+# ── Bun (preferred) — falls back to Node.js + npm if unavailable ─────────
+JS_RUNNER=""
+
+ensure_bun() {
+  if command -v bun >/dev/null; then
+    log "Bun $(bun --version) detected"
+    JS_RUNNER="bun"; return 0
+  fi
+  log "Bun not found — installing official build (https://bun.sh)…"
+  if curl -fsSL https://bun.sh/install | bash; then
+    # Bun installs to ~/.bun/bin
+    export PATH="$HOME/.bun/bin:$PATH"
+    if command -v bun >/dev/null; then
+      log "Bun $(bun --version) installed"
+      JS_RUNNER="bun"; return 0
+    fi
+  fi
+  warn "Bun install failed — falling back to npm"
+}
+
 ensure_node() {
   if command -v node >/dev/null; then
     local ver
     ver="$(node -v | sed 's/v//' | cut -d. -f1)"
     if [[ "$ver" -ge "$NODE_REQUIRED_MAJOR" ]]; then
       log "Node.js $(node -v) detected"
-      return 0
+      JS_RUNNER="npm"; return 0
     fi
     warn "Node.js $(node -v) detected; need >= ${NODE_REQUIRED_MAJOR}.x"
   else
@@ -66,8 +85,14 @@ ensure_node() {
     curl -fsSL "https://deb.nodesource.com/setup_${NODE_REQUIRED_MAJOR}.x" | $SUDO bash -
     $SUDO apt-get install -y nodejs
   else
-    fail "Please install Node.js >= ${NODE_REQUIRED_MAJOR}.x (https://nodejs.org/) and re-run."
+    fail "Please install Bun (https://bun.sh) or Node.js >= ${NODE_REQUIRED_MAJOR}.x and re-run."
   fi
+  JS_RUNNER="npm"
+}
+
+ensure_js_runner() {
+  ensure_bun
+  [[ -z "$JS_RUNNER" ]] && ensure_node
 }
 
 # ── Python venv + deps ────────────────────────────────────────────────────
@@ -109,14 +134,24 @@ run_migrations() {
 
 # ── Frontend ──────────────────────────────────────────────────────────────
 build_frontend() {
-  ensure_node
-  log "Installing frontend dependencies"
-  ( cd "$FRONT_DIR" && npm install --no-audit --no-fund )
-  if [[ "$DEV_MODE" -eq 1 ]]; then
-    log "Skipping production build (--dev). Run 'npm run dev' inside ${FRONT_DIR} to start Vite."
+  ensure_js_runner
+  log "Installing frontend dependencies (using ${JS_RUNNER})"
+  if [[ "$JS_RUNNER" == "bun" ]]; then
+    ( cd "$FRONT_DIR" && bun install )
+    if [[ "$DEV_MODE" -eq 1 ]]; then
+      log "Skipping production build (--dev). Run 'bun run dev' inside ${FRONT_DIR} to start Vite."
+    else
+      log "Building frontend (bun run build)"
+      ( cd "$FRONT_DIR" && bun run build )
+    fi
   else
-    log "Building frontend (vite build)"
-    ( cd "$FRONT_DIR" && npm run build )
+    ( cd "$FRONT_DIR" && npm install --no-audit --no-fund )
+    if [[ "$DEV_MODE" -eq 1 ]]; then
+      log "Skipping production build (--dev). Run 'npm run dev' inside ${FRONT_DIR} to start Vite."
+    else
+      log "Building frontend (vite build)"
+      ( cd "$FRONT_DIR" && npm run build )
+    fi
   fi
 }
 
@@ -144,7 +179,9 @@ Start the backend (serves the built frontend on the same port):
 
 For frontend hot-reload during development (separate terminal):
   cd ${FRONT_DIR}
-  npm run dev                         # http://localhost:5173 (proxies /api → :5000)
+  bun run dev                         # http://localhost:5173 (proxies /api → :5000)
+  # or, if you prefer npm:
+  # npm run dev
 
 Default bootstrap login (change the password immediately):
   email:    \$BOOTSTRAP_EMAIL    (see .env)

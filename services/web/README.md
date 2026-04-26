@@ -28,15 +28,42 @@ services/web/
 
 ## One-shot install
 
+### Linux / macOS (bash)
+
 ```bash
 bash scripts/install-web.sh           # backend + frontend build
 bash scripts/install-web.sh --dev     # backend + frontend deps, no build
 bash scripts/install-web.sh --no-frontend
 ```
 
-The script will install Node.js 20.x via NodeSource on Debian/Ubuntu if it is missing.
+The script prefers **Bun** for the JS toolchain and installs it from
+`https://bun.sh/install` if it is missing. If Bun cannot be installed, it
+falls back to Node.js 20.x (installed via NodeSource on Debian/Ubuntu).
+
+### Windows (PowerShell)
+
+```powershell
+# From the repo root, in a PowerShell window
+.\scripts\install-web.ps1                  # backend + frontend build
+.\scripts\install-web.ps1 -Dev             # backend + frontend deps, no build
+.\scripts\install-web.ps1 -NoFrontend
+```
+
+If you hit an execution-policy error, allow scripts for the current process:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+The PowerShell installer prefers Bun (installed via `irm bun.sh/install.ps1 | iex`)
+and falls back to Node.js 20.x. Pre-install Python 3.10+ from python.org
+or `winget install Python.Python.3.12` before running it.
 
 ## Manual setup
+
+### Backend (cross-platform)
+
+Linux / macOS:
 
 ```bash
 cd services/web
@@ -47,11 +74,44 @@ python -m services.web.migrate --bootstrap
 python -m services.web.app             # http://localhost:5000
 ```
 
+Windows PowerShell:
+
+```powershell
+cd services\web
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+Copy-Item .env.example .env             # edit values in your editor
+Get-Content .env | ForEach-Object { if ($_ -match '^([^=]+)=(.*)') { [Environment]::SetEnvironmentVariable($matches[1], $matches[2], 'Process') } }
+python -m services.web.migrate --bootstrap
+python -m services.web.app              # http://localhost:5000
+```
+
+For production (gunicorn, Linux/macOS only — on Windows use `waitress` or run
+behind IIS):
+
+```bash
+gunicorn -w 4 -b 0.0.0.0:5000 'services.web.app:create_app()'
+```
+
+### Frontend — Bun (recommended)
+
+```bash
+cd services/web/frontend
+bun install
+bun run dev                            # http://localhost:5173 (proxies /api → :5000)
+bun run build                          # writes ./dist served by Flask
+```
+
+PowerShell uses identical commands (`bun install`, `bun run dev`, `bun run build`).
+
+### Frontend — npm fallback
+
 ```bash
 cd services/web/frontend
 npm install
-npm run dev                            # http://localhost:5173 (proxies /api → :5000)
-npm run build                          # writes ./dist served by Flask in production
+npm run dev
+npm run build
 ```
 
 ## SQLite update service
