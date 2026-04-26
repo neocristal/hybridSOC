@@ -58,8 +58,9 @@ def score_event():
         r = requests.post(url, json=payload, timeout=5)
         r.raise_for_status()
         result = r.json()
-    except Exception as e:
-        return jsonify(error="ai_engine_unreachable", detail=str(e)), 502
+    except Exception:
+        current_app.logger.exception("AI engine risk scoring request failed")
+        return jsonify(error="ai_engine_unreachable"), 502
     write_audit(
         user_id=g.user["id"],
         action="ai_risk_scored",
