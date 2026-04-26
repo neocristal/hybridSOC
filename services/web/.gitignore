@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+hybridsoc.db
+hybridsoc.db-wal
+hybridsoc.db-shm
+frontend/node_modules/
+frontend/dist/
