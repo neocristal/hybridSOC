@@ -1,7 +1,7 @@
 # AI-Driven HybridSOC with Integrated GRC
 
 > **MSIT Capstone Project** | University of the People | MSIT 5270-01  
-> **Author:** Arunas | **Version:** 2.0.0 | **Jurisdiction:** European Union
+> **Author:** Arunas | **Version:** 3.5.0 | **Jurisdiction:** European Union
 
 ---
 
