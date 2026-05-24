@@ -59,7 +59,10 @@ STATIC_DIR = BASE_DIR / "static"
 DB_PATH = os.getenv("SQLITE_DB_PATH", str(BASE_DIR / "hybridsoc.db"))
 
 SUPERADMIN_EMAIL = os.getenv("SUPERADMIN_EMAIL", "superadmin@hybridsoc.example.com")
-SUPERADMIN_PASSWORD = os.getenv("SUPERADMIN_PASSWORD", "ChangeMeNow!123")
+SUPERADMIN_PASSWORD = os.getenv("SUPERADMIN_PASSWORD")
+if not SUPERADMIN_PASSWORD:
+    raise RuntimeError("CRITICAL: SUPERADMIN_PASSWORD must be set in environment variables.")
+
 ACCESS_TOKEN_TTL_MINUTES = int(os.getenv("ACCESS_TOKEN_TTL_MINUTES", "60"))
 PBKDF2_ITERATIONS = int(os.getenv("PBKDF2_ITERATIONS", "310000"))
 PBKDF2_SALT_BYTES = 16
