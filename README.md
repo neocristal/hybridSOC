@@ -1,7 +1,7 @@
 # AI-Driven HybridSOC with Integrated GRC
 
 > **MSIT Capstone Project** | University of the People | MSIT 5270-01  
-> **Author:** Arunas | **Version:** 2.0.0 | **Jurisdiction:** European Union
+> **Author:** Arunas | **Version:** 3.5.0 | **Jurisdiction:** European Union
 
 ---
 
@@ -118,11 +118,130 @@ docker compose up -d
 
 | Service | URL | Default Credentials |
 |---|---|---|
+| HybridSOC Web (Admin + Dashboard) | http://localhost:5000 | superadmin / `ChangeMeNow!123` (override in `services/web/.env`) |
 | Wazuh Dashboard | https://localhost:5601 | admin / (see .env) |
 | TheHive | http://localhost:9000 | admin@thehive.local |
 | Cortex | http://localhost:9001 | admin |
 | AI Engine | http://localhost:8000/docs | — |
 | GRC API | http://localhost:8001/docs | — |
+
+### HybridSOC Web — Flask + React 18.3 (Admin & Analytics)
+
+`services/web/` is the consolidated admin and analytics interface described in
+[`docs/system-design.md`](docs/system-design.md). Backend: Flask 3 with
+blueprints, SQLite (WAL mode) + hash-chained audit log, PBKDF2-SHA256 password
+hashing (260 000 iterations + per-user salt + global pepper), TOTP MFA, Email
+OTP, and Cloudflare Turnstile. Frontend: React 18.3 / Vite, plain JSX with
+inline CSS. Full reference: [`services/web/README.md`](services/web/README.md).
+
+#### One-shot install
+
+JS toolchain: **Bun** is preferred (faster install, single binary). Both
+installers fall back to Node.js 20.x + npm if Bun is unavailable.
+
+**Linux / macOS (bash):**
+
+```bash
+bash scripts/install-web.sh           # backend + frontend build
+bash scripts/install-web.sh --dev     # deps only, skip build
+bash scripts/install-web.sh --no-frontend
+```
+
+**Windows (PowerShell):**
+
+```powershell
+.\scripts\install-web.ps1             # backend + frontend build
+.\scripts\install-web.ps1 -Dev
+.\scripts\install-web.ps1 -NoFrontend
+# If blocked: Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+Both scripts detect Python 3.10+, ensure a JS runtime is present (Bun
+preferred, Node.js fallback), create `services/web/.venv`, install Python
+deps, seed `services/web/.env` with a generated `FLASK_SECRET_KEY` and
+`HYBRIDSOC_PEPPER`, run migrations, and bootstrap the superadmin.
+
+#### Start the backend (Flask)
+
+**Linux / macOS:**
+
+```bash
+cd services/web
+source .venv/bin/activate
+set -a && source .env && set +a              # load FLASK_SECRET_KEY, PEPPER, etc.
+python -m services.web.migrate                # apply pending migrations (idempotent)
+python -m services.web.app                    # http://localhost:5000
+```
+
+**Windows (PowerShell):**
+
+```powershell
+cd services\web
+.\.venv\Scripts\Activate.ps1
+Get-Content .env | ForEach-Object { if ($_ -match '^([^=]+)=(.*)') { [Environment]::SetEnvironmentVariable($matches[1], $matches[2], 'Process') } }
+python -m services.web.migrate
+python -m services.web.app                    # http://localhost:5000
+```
+
+Flask serves the built React bundle on the same port — once built, the
+dashboard is reachable at `http://localhost:5000/`. Health probe: `GET /api/health`.
+
+For production multi-worker (Linux/macOS):
+
+```bash
+gunicorn -w 4 -b 0.0.0.0:5000 'services.web.app:create_app()'
+```
+
+On Windows use `waitress` (`pip install waitress; waitress-serve --listen=0.0.0.0:5000 'services.web.app:create_app()'`)
+or run behind IIS.
+
+#### Start the frontend (React + Vite)
+
+**Bun (preferred — works identically on Linux/macOS/Windows):**
+
+```bash
+cd services/web/frontend
+bun install                                   # first time only
+bun run dev                                   # http://localhost:5173 → /api proxied to :5000
+bun run build                                 # production output to ./dist
+```
+
+**npm fallback:**
+
+```bash
+cd services/web/frontend
+npm install
+npm run dev
+npm run build
+```
+
+Then start Flask as above and open `http://localhost:5000/`.
+
+#### SQLite update service
+
+`services/web/migrate.py` is the schema CLI:
+
+```bash
+python -m services.web.migrate              # apply pending migrations
+python -m services.web.migrate --status     # show applied vs pending
+python -m services.web.migrate --bootstrap  # apply + create superadmin
+python -m services.web.migrate --verify     # re-walk the audit hash chain
+```
+
+Drop a new `0003_*.sql` file in `services/web/migrations/` and the next backend
+start (or `migrate` invocation) will pick it up.
+
+#### Login flow
+
+1. Open `http://localhost:5000/`, sign in with the bootstrap superadmin
+   (`BOOTSTRAP_EMAIL` / `BOOTSTRAP_PASSWORD` from `.env`).
+2. Pick an MFA method:
+   - **Email OTP** — a 6-digit code is sent via SMTP (or printed in the
+     backend log when `SMTP_HOST` is empty).
+   - **Google TOTP** — once enrolled via `POST /api/auth/totp/enroll` and
+     activated via `POST /api/auth/totp/activate`.
+3. After verifying the code you receive a Bearer token; the SPA stores it
+   in `localStorage` and uses it for subsequent `/api/*` calls.
 
 ### Run Admin Backend + Dashboard Frontend
 
@@ -219,23 +338,56 @@ This platform is grounded in peer-reviewed research:
 
 ```
 hybridsoc/
-├── README.md            ← This file
-├── SECURITY.md          ← Security policy & controls
-├── ARCHITECTURE.md      ← Full architecture documentation
-├── AI.md                ← AI engine design & ethics
-├── INTEGRITY.md         ← Data integrity & trust model
-├── API.md               ← REST API reference
-├── docker/              ← Docker Compose (dev/local)
-├── k8s/                 ← Kubernetes manifests
-├── helm/                ← Helm chart
-├── argo/                ← ArgoCD GitOps application
+├── README.md                       ← This file
+├── SECURITY.md                     ← Security policy & controls
+├── ARCHITECTURE.md                 ← Full architecture documentation
+├── AI.md                           ← AI engine design & ethics
+├── INTEGRITY.md                    ← Data integrity & trust model
+├── API.md                          ← REST API reference
+├── LITERATURE.md                   ← Literature review & standards
+├── LICENSE                         ← MIT License
+│
+├── docs/                           ← Extended documentation
+│   ├── system-design.md            ← Combined SRS + System Design (~990 words)
+│   ├── system-architecture.drawio  ← Editable Draw.io system diagram
+│   ├── system-architecture.mmd     ← Mermaid source of the same diagram
+│   └── index.html                  ← Documentation landing page
+│
 ├── services/
-│   ├── ai-engine/       ← ML/AI microservice (FastAPI)
-│   ├── grc-engine/      ← GRC compliance microservice
-│   └── api-gateway/     ← API gateway / router
-├── kafka/               ← Kafka topic configuration
-├── scripts/             ← setup.sh, deploy.sh
-└── docs/                ← Extended documentation
+│   ├── web/                        ← Flask 3 + React 18.3 admin & analytics UI
+│   │   ├── app.py                  ←   app factory, runs migrations on start
+│   │   ├── config.py               ←   env-driven Config dataclass
+│   │   ├── db.py                   ←   SQLite WAL helper + migration runner
+│   │   ├── auth.py                 ←   PBKDF2, TOTP, Email OTP, Turnstile, sessions
+│   │   ├── audit.py                ←   hash-chained immutable audit log
+│   │   ├── migrate.py              ←   SQLite update service CLI
+│   │   ├── blueprints/             ←   auth / admin / dashboard / risk / grc / audit
+│   │   ├── migrations/             ←   versioned *.sql migration files
+│   │   ├── frontend/               ←   React 18.3 + Vite SPA (Login, MFA, Dashboard, …)
+│   │   └── requirements.txt
+│   ├── ai-engine/                  ← ML / AI microservice (FastAPI)
+│   ├── grc-engine/                 ← GRC compliance microservice
+│   ├── api-gateway/                ← API gateway / router
+│   ├── api/                        ← Legacy admin API (FastAPI, superseded by web/)
+│   ├── ai/                         ← Standalone AI demo service
+│   └── grc/                        ← Standalone GRC demo service
+│
+├── docker/                         ← Docker Compose (dev / local)
+├── docker-compose.yml              ← Top-level compose file
+├── k8s/                            ← Kubernetes manifests (base + overlays)
+├── helm/                           ← Helm chart
+├── argo/                           ← ArgoCD GitOps application
+├── ansible/                        ← Ansible playbooks (OPNsense, Wazuh, Kafka, …)
+├── kafka/                          ← Kafka topic configuration
+├── wazuh/                          ← Wazuh manager configuration
+├── base/                           ← Kustomize base
+├── overlays/                       ← Kustomize overlays
+├── ci/                             ← CI helper assets
+│
+└── scripts/
+    ├── install-web.sh              ← One-shot installer for services/web/
+    ├── setup.sh
+    └── deploy.sh
 ```
 
 ---

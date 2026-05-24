@@ -1,0 +1,94 @@
+%% HybridSOC v2.0.0 — System Architecture (Mermaid)
+%% Render with mermaid-cli or any markdown viewer that supports mermaid.
+flowchart TB
+    %% ─── Layer 1: Endpoints ───
+    subgraph L1["L1 · Users / Devices / Endpoints"]
+        U[Analysts & Admins]
+        EP[Velociraptor / osquery / Wazuh agents]
+    end
+
+    %% ─── Layer 2: Identity ───
+    subgraph L2["L2 · Identity (IAM / SSO / MFA / PAM)"]
+        KC[Keycloak SSO]
+        VLT[HashiCorp Vault PAM]
+        MFA[TOTP MFA]
+    end
+
+    %% ─── Layer 3: Zero Trust ───
+    subgraph L3["L3 · Zero Trust Gateway (NIST SP 800-207)"]
+        ZTG[Policy Engine + ZTNA]
+    end
+
+    %% ─── Layer 4: Network ───
+    subgraph L4["L4 · Network Security"]
+        FW[OPNsense Firewall]
+        IDS[Suricata IDS/IPS]
+        ZK[Zeek NSM]
+    end
+
+    %% ─── Layer 5: Telemetry ───
+    subgraph L5["L5 · Kafka Streaming Backbone"]
+        K1[(soc-alerts)]
+        K2[(network-events)]
+        K3[(api-logs)]
+    end
+
+    %% ─── Layer 6: Analytics ───
+    subgraph L6["L6 · SOC Analytics"]
+        SIEM[Wazuh + Elastic SIEM]
+        TI[MISP + OpenCTI]
+        AI[AI Engine :8000<br/>Isolation Forest · LSTM · FAISS RAG · Mistral-7B]
+    end
+
+    %% ─── Layer 7: Response & GRC ───
+    subgraph L7["L7 · Response & GRC"]
+        SOAR[TheHive + Cortex + Shuffle]
+        GRC[GRC Engine :8001<br/>ISO 27001 · DORA · NIS2 · GDPR · EU AI Act]
+        DOC[DocGen — DPIA / BCP / IR Reports]
+    end
+
+    %% ─── Microservices control plane ───
+    subgraph CP["Control Plane"]
+        GW[API Gateway :8080]
+        ADMIN[Admin API + Dashboard :8002]
+    end
+
+    %% ─── Persistence ───
+    subgraph DS["Persistence"]
+        ES[(Elasticsearch)]
+        DB[(SQLite WAL · hash-chain audit)]
+    end
+
+    %% ─── Edges ───
+    U -->|login| KC
+    KC --> MFA --> ZTG
+    VLT --> ZTG
+    EP --> L4
+    L4 --> K1
+    L4 --> K2
+    GW --> K3
+    K1 --> SIEM
+    K1 --> AI
+    K2 --> SIEM
+    K2 --> TI
+    K3 --> GRC
+    SIEM --> AI
+    TI --> AI
+    AI -->|score >= 75| SOAR
+    AI --> GRC
+    SIEM --> GRC
+    SOAR --> GRC
+    GRC --> DOC
+    GW <--> AI
+    GW <--> GRC
+    GW <--> ADMIN
+    AI --> DB
+    GRC --> DB
+    SIEM --> ES
+    ADMIN --> DB
+    ZTG --> GW
+
+    classDef layer fill:#0b3d91,stroke:#0b3d91,color:#ffffff
+    classDef store fill:#444,stroke:#222,color:#fff
+    class L1,L2,L3,L4,L5,L6,L7,CP layer
+    class ES,DB store

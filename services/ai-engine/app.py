@@ -114,10 +114,15 @@ def compute_risk_score(req: RiskRequest) -> dict:
         regulations.extend(REGULATION_MAP.get(f, []))
     regulations = list(dict.fromkeys(regulations))  # deduplicate, preserve order
 
+    # Privilege escalation is a high-stakes signal — always elevate to a
+    # human reviewer regardless of the numeric score (EU AI Act Art. 14).
+    privilege_escalation = "privilege_escalation" in features
+    human_review = score >= 75 or privilege_escalation
+
     # Action recommendation
     if score >= 90:
         action = "automated_response_and_escalate"
-    elif score >= 75:
+    elif score >= 75 or privilege_escalation:
         action = "create_case"
     elif score >= 50:
         action = "notify_analyst"
@@ -139,7 +144,7 @@ def compute_risk_score(req: RiskRequest) -> dict:
         "regulation": regulations,
         "explanation": explanation,
         "action_recommended": action,
-        "human_review_required": score >= 75,
+        "human_review_required": human_review,
         "model_version": "isolation-forest-v2.1.0",
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
