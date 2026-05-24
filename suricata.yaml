@@ -1,0 +1,60 @@
+%YAML 1.1
+---
+vars:
+  address-groups:
+    HOME_NET: "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]"
+    EXTERNAL_NET: "!$HOME_NET"
+    DNS_SERVERS: "$HOME_NET"
+    SMTP_SERVERS: "$HOME_NET"
+    HTTP_SERVERS: "$HOME_NET"
+    SHELLCODE_SERVERS: "!$HOME_NET"
+    MALWARE_SERVERS: "!$HOME_NET"
+
+default-rule-path: /etc/suricata/rules
+rule-files:
+  - suricata.rules
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filename: eve.json
+      types:
+        - alert:
+            payload: yes
+            payload-buffer-size: 4096
+            metadata: yes
+        - http:
+            extended: yes
+        - dns:
+            queries: yes
+            answers: yes
+        - tls:
+            extended: yes
+        - files:
+            force-magic: yes
+        - flow
+
+stats:
+  enabled: yes
+  filename: stats.log
+  interval: 8
+
+logging:
+  default-log-level: notice
+  outputs:
+    - console:
+        enabled: yes
+    - file:
+        enabled: yes
+        filename: suricata.log
+
+app-layer:
+  protocols:
+    tls:
+      enabled: yes
+    dns:
+      enabled: yes
+    http2:
+      enabled: yes
+    http:
+      enabled: yes

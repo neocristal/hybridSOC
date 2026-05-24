@@ -17,6 +17,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install security tools
+        run: pip install bandit pip-audit
+
+      - name: Run Bandit (Static Code Analysis)
+        run: bandit -r . -ll -ii
+
+      - name: Run pip-audit (Dependency Scan)
+        run: |
+          pip-audit -r services/ai-engine/requirements.txt
+          pip-audit -r services/api-gateway/requirements.txt
+          pip-audit -r services/api/requirements.txt
+          pip-audit -r services/grc-engine/requirements.txt
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:

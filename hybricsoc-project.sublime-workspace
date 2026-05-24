@@ -1,0 +1,610 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"da",
+				"dashboards"
+			],
+			[
+				"dashboa",
+				"dashboards"
+			],
+			[
+				"business",
+				"business_value_page"
+			],
+			[
+				"blo",
+				"blob"
+			],
+			[
+				"get_du",
+				"get_document_owners"
+			],
+			[
+				"das",
+				"dashboards"
+			],
+			[
+				"Da",
+				"Dashboard"
+			],
+			[
+				"Messg",
+				"message"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": ".env",
+			"settings":
+			{
+				"buffer_size": 750,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			},
+			"undo_stack":
+			[
+				[
+					3,
+					1,
+					"insert",
+					{
+						"characters": "KSjęūsj"
+					},
+					"BwAAAEcAAAAAAAAASAAAAAAAAAAIAAAAY2hhbmdlbWVIAAAAAAAAAEkAAAAAAAAAAAAAAEkAAAAAAAAASgAAAAAAAAAAAAAASgAAAAAAAABLAAAAAAAAAAAAAABLAAAAAAAAAEwAAAAAAAAAAAAAAEwAAAAAAAAATQAAAAAAAAAAAAAATQAAAAAAAABOAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAARwAAAAAAAABPAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					5,
+					1,
+					"insert",
+					{
+						"characters": "547Sxįėk"
+					},
+					"CAAAAEcAAAAAAAAASAAAAAAAAAAJAAAAS1NqxJnFq3NqSAAAAAAAAABJAAAAAAAAAAAAAABJAAAAAAAAAEoAAAAAAAAAAAAAAEoAAAAAAAAASwAAAAAAAAAAAAAASwAAAAAAAABMAAAAAAAAAAAAAABMAAAAAAAAAE0AAAAAAAAAAAAAAE0AAAAAAAAATgAAAAAAAAAAAAAATgAAAAAAAABPAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAATgAAAAAAAABHAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					6,
+					1,
+					"insert",
+					{
+						"characters": "JZsą"
+					},
+					"BAAAAE8AAAAAAAAAUAAAAAAAAAAAAAAAUAAAAAAAAABRAAAAAAAAAAAAAABRAAAAAAAAAFIAAAAAAAAAAAAAAFIAAAAAAAAAUwAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAATwAAAAAAAABPAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					8,
+					1,
+					"insert",
+					{
+						"characters": "475Z234KS"
+					},
+					"CQAAAEcAAAAAAAAASAAAAAAAAAAPAAAANTQ3U3jEr8SXa0pac8SFSAAAAAAAAABJAAAAAAAAAAAAAABJAAAAAAAAAEoAAAAAAAAAAAAAAEoAAAAAAAAASwAAAAAAAAAAAAAASwAAAAAAAABMAAAAAAAAAAAAAABMAAAAAAAAAE0AAAAAAAAAAAAAAE0AAAAAAAAATgAAAAAAAAAAAAAATgAAAAAAAABPAAAAAAAAAAAAAABPAAAAAAAAAFAAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAUwAAAAAAAABHAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					9,
+					1,
+					"insert",
+					{
+						"characters": "j5"
+					},
+					"AgAAAFAAAAAAAAAAUQAAAAAAAAAAAAAAUQAAAAAAAABSAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAUAAAAAAAAABQAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					10,
+					1,
+					"insert",
+					{
+						"characters": "_sw"
+					},
+					"AwAAAFIAAAAAAAAAUwAAAAAAAAAAAAAAUwAAAAAAAABUAAAAAAAAAAAAAABUAAAAAAAAAFUAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAUgAAAAAAAABSAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					13,
+					1,
+					"insert",
+					{
+						"characters": "a"
+					},
+					"AQAAAEgAAAAAAAAASQAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAASAAAAAAAAABIAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					14,
+					1,
+					"insert",
+					{
+						"characters": "!"
+					},
+					"AQAAAEkAAAAAAAAASgAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAASQAAAAAAAABJAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					15,
+					1,
+					"insert",
+					{
+						"characters": "zr"
+					},
+					"AgAAAEoAAAAAAAAASwAAAAAAAAAAAAAASwAAAAAAAABMAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAASgAAAAAAAABKAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					39,
+					1,
+					"paste",
+					null,
+					"AQAAALoBAAAAAAAAzAEAAAAAAAAIAAAAY2hhbmdlbWU",
+					"AQAAAAAAAAABAAAAugEAAAAAAADCAQAAAAAAAP///////+9/"
+				],
+				[
+					42,
+					1,
+					"paste",
+					null,
+					"AQAAACUCAAAAAAAANwIAAAAAAAAIAAAAY2hhbmdlbWU",
+					"AQAAAAAAAAABAAAAJQIAAAAAAAAtAgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					47,
+					1,
+					"paste",
+					null,
+					"AQAAAHwCAAAAAAAAjgIAAAAAAAAIAAAAY2hhbmdlbWU",
+					"AQAAAAAAAAABAAAAfAIAAAAAAACEAgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					50,
+					1,
+					"paste",
+					null,
+					"AQAAALMCAAAAAAAAxQIAAAAAAAAIAAAAY2hhbmdlbWU",
+					"AQAAAAAAAAABAAAAswIAAAAAAAC7AgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					53,
+					1,
+					"paste",
+					null,
+					"AQAAAEwCAAAAAAAAiwIAAAAAAAAIAAAAY2hhbmdlbWU",
+					"AQAAAAAAAAABAAAATAIAAAAAAABUAgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					54,
+					1,
+					"revert",
+					null,
+					"AgAAAAAAAAAAAAAAAAAAAAAAAADZAwAAIyA9PT09PSBJZGVudGl0eSAmIEFjY2VzcyA9PT09PQpLRVlDTE9BS19BRE1JTj1hZG1pbgpLRVlDTE9BS19QQVNTV09SRD00YSF6cjc1WjIzNEtTajVfc3cKVkFVTFRfVE9LRU49aHZzLnRlc3QKCiMgPT09PT0gRGF0YWJhc2UgPT09PT0KUE9TVEdSRVNfVVNFUj1oeWJyaWRzb2MKUE9TVEdSRVNfUEFTU1dPUkQ9aHlicmlkc29jClBPU1RHUkVTX0RCPWh5YnJpZHNvYwoKIyA9PT09PSBNZXNzYWdlIFF1ZXVlID09PT09ClJBQkJJVE1RX1VTRVI9Z3Vlc3QKUkFCQklUTVFfUEFTU1dPUkQ9Z3Vlc3QKCiMgPT09PT0gU3RvcmFnZSA9PT09PQpNSU5JT19ST09UX1VTRVI9bWluaW9hZG1pbgpNSU5JT19ST09UX1BBU1NXT1JEPW1pbmlvYWRtaW4KCiMgPT09PT0gTUlTUCA9PT09PQpNSVNQX0FETUlOX0VNQUlMPWFkbWluQGh5YnJpZHNvYy5sb2NhbApNSVNQX0FETUlOX1BBU1NXT1JEPTRhIXpyNzVaMjM0S1NqNV9zdwoKIyA9PT09PSBPcGVuQ1RJID09PT09Ck9QRU5DVElfQURNSU5fRU1BSUw9YWRtaW5AaHlicmlkc29jLmxvY2FsCk9QRU5DVElfQURNSU5fUEFTU1dPUkQ9NGEhenI3NVoyMzRLU2o1X3N3Ck9QRU5DVElfQURNSU5fVE9LRU49OGZhM2M0ZTkxYjcyZDBmNGM2YTFlOGI5ZDNmNTdhMmM5ZTRiMWQ3ZjBhNmMzZThiNWQxZjljN2EzZTRiOGQyCgojID09PT09IFRoZUhpdmUgPT09PT0KVEhFX0hJVkVfU0VDUkVUPTRhIXpyNzVaMjM0S1NqNV9zdwoKIyA9PT09PSBDb3J0ZXggPT09PT0KQ09SVEVYX1NFQ1JFVD00YSF6cjc1WjIzNEtTajVfc3cKCiMgPT09PT0gR3JhZmFuYSA9PT09PQpHUkFGQU5BX1BBU1NXT1JEPWFkbWluCgojID09PT09IEFJL0FuYWx5dGljcyA9PT09PQojIE1pc3RyYWwtN0IgbW9kZWwgc2V0dGluZ3MgKHB1bGxlZCB2aWEgT2xsYW1hKQpNSVNUUkFMX01PREVMPW1pc3RyYWw6N2IKRkFJU1NfRElNRU5TSU9OPTM4NApMU1RNX1dJTkRPV19IT1VSUz0yNApJU09MQVRJT05fRk9SRVNUX0VTVElNQVRPUlM9MjAwCgAAAAAAAAAA0AIAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAiwIAAAAAAACLAgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					60,
+					1,
+					"insert",
+					{
+						"characters": "JSh3kak3"
+					},
+					"CAAAAIgBAAAAAAAAiQEAAAAAAAAIAAAAY2hhbmdlbWWJAQAAAAAAAIoBAAAAAAAAAAAAAIoBAAAAAAAAiwEAAAAAAAAAAAAAiwEAAAAAAACMAQAAAAAAAAAAAACMAQAAAAAAAI0BAAAAAAAAAAAAAI0BAAAAAAAAjgEAAAAAAAAAAAAAjgEAAAAAAACPAQAAAAAAAAAAAACPAQAAAAAAAJABAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAiAEAAAAAAACQAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					61,
+					1,
+					"insert",
+					{
+						"characters": "_skk3jaal"
+					},
+					"CQAAAJABAAAAAAAAkQEAAAAAAAAAAAAAkQEAAAAAAACSAQAAAAAAAAAAAACSAQAAAAAAAJMBAAAAAAAAAAAAAJMBAAAAAAAAlAEAAAAAAAAAAAAAlAEAAAAAAACVAQAAAAAAAAAAAACVAQAAAAAAAJYBAAAAAAAAAAAAAJYBAAAAAAAAlwEAAAAAAAAAAAAAlwEAAAAAAACYAQAAAAAAAAAAAACYAQAAAAAAAJkBAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAkAEAAAAAAACQAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					62,
+					1,
+					"insert",
+					{
+						"characters": "!"
+					},
+					"AQAAAJkBAAAAAAAAmgEAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAmQEAAAAAAACZAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					67,
+					1,
+					"paste",
+					null,
+					"AQAAAL8BAAAAAAAA0QEAAAAAAAAIAAAAY2hhbmdlbWU",
+					"AQAAAAAAAAABAAAAxwEAAAAAAAC/AQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					70,
+					1,
+					"paste",
+					null,
+					"AQAAAEcAAAAAAAAAWQAAAAAAAAAIAAAAY2hhbmdlbWU",
+					"AQAAAAAAAAABAAAARwAAAAAAAABPAAAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"file": "SECURITY.md",
+			"settings":
+			{
+				"buffer_size": 5537,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Add Repository"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/D/Darbai/hybridSOC",
+		"/D/Darbai/hybridSOC/base",
+		"/D/Darbai/hybridSOC/ci",
+		"/D/Darbai/hybridSOC/docker",
+		"/D/Darbai/hybridSOC/helm",
+		"/D/Darbai/hybridSOC/k8s",
+		"/D/Darbai/hybridSOC/kafka",
+		"/D/Darbai/hybridSOC/wazuh"
+	],
+	"file_history":
+	[
+		"/D/Darbai/risk-analysis/backend/routes_misc.py",
+		"/D/Darbai/risk-analysis/frontend/src/views/RegisterWizard.jsx",
+		"/D/Darbai/risk-analysis/frontend/public/manifest.json",
+		"/D/Darbai/risk-analysis/backend/auth.py",
+		"/D/Darbai/risk-analysis/backend/security.py",
+		"/D/Darbai/risk-analysis/backend/db.py",
+		"/D/Darbai/risk-analysis/frontend/package.json",
+		"/D/Darbai/risk-analysis/frontend/src/views/AdminView.jsx",
+		"/D/Darbai/risk-analysis/frontend/src/constants.js",
+		"/D/Darbai/risk-analysis/backend/app.py",
+		"/D/Darbai/risk-analysis/frontend/src/App.jsx",
+		"/D/Darbai/risk-analysis/backend/analytics.py",
+		"/D/Darbai/risk-analysis/backend/kb.py",
+		"/D/Darbai/risk-analysis/backend/system_mgmt.py",
+		"/D/Darbai/risk-analysis/backend/log360.py",
+		"/D/Darbai/risk-analysis/backend/admin.py",
+		"/D/Darbai/risk-analysis/backend/evidence.py",
+		"/D/Darbai/risk-analysis/frontend/src/views/Log360View.jsx",
+		"/D/Darbai/risk-analysis/backend/law.py",
+		"/D/Darbai/risk-analysis/frontend/dist/index.html",
+		"/D/Darbai/Start-Apps.ps1",
+		"/D/Darbai/risk-analysis/frontend/src/views/LawView.jsx",
+		"/D/Darbai/risk-analysis/.claude/worktrees/nervous-hypatia/backend/kb.py",
+		"/D/Darbai/risk-analysis/.claude/worktrees/nervous-hypatia/backend/auth.py",
+		"/D/Darbai/risk-analysis/mobile/eas.json",
+		"/D/Darbai/risk-analysis/mobile/windows/run.ps1",
+		"/D/Darbai/risk-analysis/mobile/.github/workflows/eas-build.yml",
+		"/D/Darbai/risk-analysis/mobile/app.json",
+		"/D/Darbai/risk-analysis/backend/.env.example",
+		"/D/Darbai/risk-analysis/backend/requirements.txt",
+		"/D/Darbai/risk-analysis/backend/cookies.py",
+		"/D/Darbai/risk-analysis/frontend/vite.config.js",
+		"/D/Darbai/risk-analysis/backend/.env",
+		"/D/Darbai/risk-analysis/backend/awareness.py",
+		"/D/Darbai/risk-analysis/weaviate_data/docker-compose.yml",
+		"/D/Darbai/risk-analysis/frontend/src/views/AuthView.jsx",
+		"/D/Darbai/risk-analysis/README.md",
+		"/D/Darbai/risk-analysis/frontend/src/components/VersionDiffCard.jsx",
+		"/D/Darbai/risk-analysis/backend/cm.py",
+		"/D/Darbai/risk-analysis/frontend/src/components/CountrySelector.jsx",
+		"/D/Darbai/risk-analysis/backend/compliance_consequences.py",
+		"/D/Darbai/risk-analysis/.claude/worktrees/nervous-hypatia/backend/app.py",
+		"/D/Darbai/risk-analysis/frontend/src/i18n.js",
+		"/D/Darbai/risk-analysis/.claude/worktrees/nervous-hypatia/frontend/src/i18n.js",
+		"/D/Darbai/risk-analysis/frontend/dist/assets/banner.js",
+		"/D/Darbai/risk-analysis/backend/websearch.py",
+		"/D/Darbai/risk-analysis/backend/frameworks.py",
+		"/D/Darbai/risk-analysis/frontend/src/views/ChatView.jsx",
+		"/D/Darbai/risk-analysis/.claude/worktrees/nervous-hypatia/backend/audit_schema.py",
+		"/D/Darbai/risk-analysis/backend/cisa.py",
+		"/D/Darbai/risk-analysis/backend/create_superadmin.py",
+		"/D/Darbai/risk-analysis/frontend/package-lock.json",
+		"/D/Darbai/risk-analysis/backend/routes_documents.py",
+		"/D/Darbai/risk-analysis/backend/security_clean.py",
+		"/D/Darbai/risk-analysis/frontend/src/components/ui.jsx",
+		"/D/Darbai/risk-analysis/rebuild.sh",
+		"/D/Darbai/risk-analysis/backend/check_config.py",
+		"/D/Darbai/engardeccg/services/tournament_service.py",
+		"/D/Darbai/engardeccg/repositories/tournament_repository.py",
+		"/D/Darbai/engardeccg/services/cardg_service.py",
+		"/D/Darbai/engardeccg/repositories/cardg_repository.py",
+		"/D/Darbai/engardeccg/services/card_render_service.py",
+		"/D/Darbai/engardeccg/generator_layout_example.json",
+		"/D/Darbai/engardeccg/services/template_service.py",
+		"/D/Darbai/engardeccg/dashboards/generator_admin.py",
+		"/D/Darbai/engardeccg/dashboards/generator.py",
+		"/D/Darbai/engardeccg/app.py",
+		"/D/Darbai/engardeccg/repositories/deck_repository.py",
+		"/D/Darbai/engardeccg/i18n.txt",
+		"/D/Darbai/engardeccg/i18n.py",
+		"/D/Darbai/engardeccg/UI/profile_ui.py",
+		"/D/Darbai/engardeccg/dashboards/deck.py",
+		"/D/Darbai/engardeccg/dashboards/tournaments.py",
+		"/D/Darbai/engardeccg/assets/decks_asset.py",
+		"/D/Darbai/engardeccg/services/deck_service.py",
+		"/D/Darbai/engardeccg/services/user_service.py",
+		"/D/Darbai/engardeccg/repositories/user_repository.py",
+		"/D/Darbai/engardeccg/security.py",
+		"/D/Darbai/engardeccg/dashboards/profile.py",
+		"/D/Darbai/engardeccg/dashboards/admin.py",
+		"/D/Darbai/engardeccg/services/account_service.py",
+		"/D/Darbai/engardeccg/dashboards/characters.py",
+		"/D/Darbai/engardeccg/assets/character_asset.py",
+		"/D/Darbai/engardeccg/UI/character_ui.py",
+		"/D/Darbai/engardeccg/repositories/character_repository.py",
+		"/D/Darbai/engardeccg/dashboards/backstories.py",
+		"/D/Darbai/engardeccg/repositories/backstory_repository.py",
+		"/D/Darbai/engardeccg/UI/backstory_ui.py",
+		"/D/Darbai/engardeccg/db.py",
+		"/D/Darbai/engardeccg/services/character_service.py",
+		"/D/Darbai/engardeccg/controls/character_control.py",
+		"/D/Darbai/engardeccg/repositories/country_repository.py",
+		"/D/Darbai/engardeccg/gen_code.py",
+		"/D/Darbai/engardeccg/gen_code",
+		"/D/Darbai/engardeccg/auth.py",
+		"/D/Darbai/engardeccg/UI/card_ui.py",
+		"/D/Darbai/engardeccg/UI/deck_ui.py",
+		"/D/Darbai/engardeccg/repositories/card_repository.py",
+		"/D/Darbai/engardeccg/controls/card_control.py",
+		"/D/Darbai/engardeccg/dashboards/cards.py",
+		"/D/Darbai/engardeccg/services/card_service.py",
+		"/D/Darbai/engardeccg/assets/cards_asset.py",
+		"/D/Darbai/engardeccg/store/card_store.py",
+		"/D/Darbai/engardeccg/scripts/seed_cards.py",
+		"/D/Darbai/engardeccg/controls/deck_control.py",
+		"/D/Darbai/engardeccg/services/flag_service.py",
+		"/D/Darbai/engardeccg/services/kyc_service.py",
+		"/D/Darbai/engardeccg/dashboards/security.py",
+		"/D/Darbai/engardeccg/services/email_service.py",
+		"/D/Darbai/engardeccg/.env",
+		"/D/Darbai/engardeccg/dashboards/ccg.py",
+		"/D/Darbai/engardeccg/repositories/audit_repository.py",
+		"/D/Darbai/engardeccg/services/audit_service.py",
+		"/D/Darbai/engardeccg/repositories/flag_repository.py",
+		"/D/Darbai/engardeccg/services/price_service.py",
+		"/D/Darbai/engardeccg/dashboards/price.py",
+		"/D/Darbai/engardeccg/dashboards/battles.py",
+		"/D/Darbai/engardeccg/config.py",
+		"/D/Darbai/engardeccg/requirements.txt",
+		"/D/Darbai/engardeccg/services/gdpr_service.py",
+		"/D/Darbai/engardeccg/repositories/admin_repository.py",
+		"/D/Darbai/engardeccg/services/admin_service.py",
+		"/D/Darbai/engardeccg/services/admin_moderation_service.py",
+		"/D/Darbai/engardeccg/repositories/battle_repository.py",
+		"/D/Darbai/engardeccg/services/reputation_service.py",
+		"/D/Darbai/engardeccg/repositories/reputation_repository.py",
+		"/D/Darbai/engardeccg/manuals/privacy_policy_manual.py",
+		"/D/Darbai/engardeccg/admin/email_debug.py"
+	],
+	"find":
+	{
+		"height": 38.0
+	},
+	"find_in_files":
+	{
+		"height": 101.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"scrollbar_highlights": true,
+		"show_context": true,
+		"use_buffer2": true,
+		"use_gitignore": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": ".env",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 750,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								89,
+								89
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "SECURITY.md",
+					"selected": true,
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 5537,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"stack_multiselect": false,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 22.0
+	},
+	"input":
+	{
+		"height": 44.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 130.0,
+		"history":
+		[
+		]
+	},
+	"pinned_build_system": "",
+	"project": "hybricsoc-project.sublime-project",
+	"replace":
+	{
+		"height": 40.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 251.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

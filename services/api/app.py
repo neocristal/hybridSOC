@@ -27,6 +27,30 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, EmailStr, Field
+import redis
+import jwt
+import hvac
+
+# ── Redis and Vault Setup ─────────────────────────────────────────────────────
+REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379/0")
+redis_client = redis.from_url(REDIS_URL, decode_responses=True)
+
+def get_vault_client():
+    client = hvac.Client(url=VAULT_ADDR)
+    # Auth via Kubernetes service account if available or env token
+    if os.path.exists("/var/run/secrets/kubernetes.io/serviceaccount/token"):
+        with open("/var/run/secrets/kubernetes.io/serviceaccount/token", "r") as f:
+            token = f.read()
+        client.auth.kubernetes.login(role=VAULT_ROLE, jwt=token)
+    return client
+
+def get_jwt_secret():
+    client = get_vault_client()
+    secret = client.secrets.kv.v2.read_secret_version(path='jwt-key', mount_point='secret')
+    return secret['data']['data']['key']
+
+JWT_SECRET = get_jwt_secret()
+ALGORITHM = "HS256"
 
 load_dotenv(Path(__file__).resolve().parent / ".env")
 
@@ -58,12 +82,14 @@ app = FastAPI(
     description="IAM-backed admin API with SQLite, MFA, SMTP OTP delivery, and dashboard feeds.",
 )
 
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
@@ -453,7 +479,7 @@ def mfa_verify(payload: MFAVerifyRequest):
             """,
             (ctx["user_id"],),
         ).fetchone()
-        if row and row["expires_at"] > datetime.now(timezone.utc).isoformat() and row["code_hash"] == hash_password(payload.otp_code):
+        if row and row["expires_at"] > datetime.now(timezone.utc).isoformat() and verify_password(payload.otp_code, row["code_hash"]):
             conn.execute("UPDATE mfa_codes SET consumed = 1 WHERE id = ?", (row["id"],))
             conn.commit()
             verified = True
