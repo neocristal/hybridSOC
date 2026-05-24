@@ -35,8 +35,12 @@ metadata:
   namespace: hybridsoc
 spec:
   podSelector:
-    matchLabels:
-      app: ai-engine
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - ai-engine
+          - grc-engine
   ingress:
     - from:
         - podSelector:
@@ -44,3 +48,4 @@ spec:
               app: api-gateway
       ports:
         - port: 8000
+        - port: 8001

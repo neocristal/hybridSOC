@@ -92,9 +92,48 @@ def compute_risk_score(req: RiskRequest) -> dict:
         features.append("privilege_escalation")
         score += 40
 
-    # Random variance to simulate model uncertainty (remove in production)
-    noise = int(np.random.randint(-5, 10))
-    score = max(0, min(100, score + noise))
+    # ── Security Middleware ──────────────────────────────────────────────────────
+INTERNAL_AUTH_SECRET = os.getenv("INTERNAL_AUTH_SECRET", "change-me-internal-secret")
+
+async def verify_internal_auth(authorization: str = Header(...)):
+    if authorization != f"Bearer {INTERNAL_SECRET}":
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+# ─── Scoring Logic (Deterministic) ──────────────────────────────────────────
+
+def compute_risk_score(req: RiskRequest) -> dict:
+    features = []
+    score = 0
+
+    # Volume spike detection
+    if req.bytes_transferred and req.bytes_transferred > 104857600:
+        features.append("volume_spike")
+        score += 35
+
+    # Off-hours detection
+    try:
+        ts = datetime.fromisoformat(req.timestamp.replace("Z", "+00:00")) if req.timestamp else datetime.now(timezone.utc)
+        if ts.hour < 6 or ts.hour >= 20:
+            features.append("off_hours_activity")
+            score += 25
+    except Exception:
+        pass
+
+    # Suspicious activity keywords
+    suspicious = ["bulk_download", "bulk_file_download", "admin_override", "mass_delete", "export_all"]
+    if any(kw in req.activity.lower() for kw in suspicious):
+        features.append("unusual_source")
+        score += 20
+
+    # Privilege-related activities
+    if "escalat" in req.activity.lower() or "sudo" in req.activity.lower():
+        features.append("privilege_escalation")
+        score += 40
+
+    # Deterministic scoring: clamped to 0-100
+    score = max(0, min(100, score))
+    
+    # ... (rest of the severity and mapping logic remains same but without noise)
 
     # Severity classification
     if score >= 90:
