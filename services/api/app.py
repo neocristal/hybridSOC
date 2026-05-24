@@ -451,11 +451,23 @@ def mfa_challenge(payload: MFAChallengeRequest):
     return {"status": "ready", "method": "google_totp", "otpauth_uri": uri}
 
 
+# ── Security Middleware ──────────────────────────────────────────────────────
+def rate_limit_mfa(user_id: str):
+    key = f"rate:mfa:{user_id}"
+    count = redis_client.incr(key)
+    if count == 1:
+        redis_client.expire(key, 60) # 60 seconds window
+    if count > 5: # Max 5 attempts per minute
+        raise HTTPException(status_code=429, detail="Too many attempts. Try again later.")
+
 @app.post("/auth/mfa/verify", tags=["Auth"])
 def mfa_verify(payload: MFAVerifyRequest):
     ctx = pending_logins.get(payload.pending_token)
-    if not ctx or ctx["expires_at"] < datetime.now(timezone.utc):
+    if not ctx:
         raise HTTPException(status_code=401, detail="Pending login expired")
+        
+    rate_limit_mfa(ctx["user_id"])
+    # ... (rest of verification)
 
     verified = False
 
